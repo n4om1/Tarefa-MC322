@@ -20,7 +20,8 @@ public class CartaDano {
         this.quantidade = quantidade + 1;
     }
 
-    boolean vazio(){
+    //quando se esgota as cartas durante um turno retorna verdadeiro caso contrário, retorna falso
+    boolean vazio(){ 
         if (quantidade == 0){
             return true;
         }

@@ -5,20 +5,20 @@ public class App {
         CartaDano cDano1 = new CartaDano("Espada", 1, 3);
         CartaEscudo cEscudo1 = new CartaEscudo("Escudo", 2, 5);
 
-        //while
         Heroi h1 = new Heroi("Herói", 20, cEscudo1.quantidade);
         Inimigo I1 = new Inimigo("Inimigo", cEscudo1.quantidade, 10, 3);
         Scanner entrada = new Scanner(System.in);
         Scanner item = new Scanner(System.in);
-    // int protecao = 0;
+   
         while (h1.EstaVivo()) {
-             //loja:
+             //loja disponível para comprar novas cartas em cada turno:
             
             int carta;
             boolean uso_loja = true;
             while (uso_loja) {
                 
                 System.out.println("loja");
+                System.out.println("Digite o número correspondente à carta para comprá-la ou pressione 0 para fechar a loja");
                 System.out.println("1 - " + cDano1.descrição());
                 System.out.println("2 - " + cEscudo1.descrição());
                 System.out.println("0 - fechar loja");
@@ -29,7 +29,7 @@ public class App {
                         cDano1.aumenta_numero_cartas();
                         break;
                     case 2:
-                        cEscudo1.numero_cartas();
+                        cEscudo1.aumenta_numero_cartas();
                         break;
                     default:
                         uso_loja = false;
@@ -60,7 +60,7 @@ public class App {
                 switch (key) {
                     case 1:
                         if(cDano1.vazio()){
-                            System.out.println("Ja se usaram se todos as cartas desse tipo");
+                            System.out.println("Já se usaram todas as cartas desse tipo");
                             break;
                         }
                         dano = cDano1.usar(cDano1.nome, cDano1.dano);
@@ -70,7 +70,7 @@ public class App {
                         break;
                     case 2:
                         if(cEscudo1.vazio()){
-                            System.out.println("Ja se usaram se todos as cartas desse tipo");
+                            System.out.println("Já se usaram todas as cartas desse tipo");
                             break;
                         }
                         protecao = cEscudo1.usar(cEscudo1.nome);
@@ -110,10 +110,10 @@ public class App {
 
             if (protecao > 0){
                 h1.vida = h1.ReceberDano(I1.Atacar());
-                System.out.println(I1.nome + "ataca com "+ I1.ataque + " de dano. A defesa absorve parte do dano ("+h1.vida+"/20 de vida restantes)");
+                System.out.println(I1.nome + " ataca com "+ I1.ataque + " de dano. A defesa absorve parte do dano ("+h1.vida+"/20 de vida restantes)");
             }else{
                 h1.vida = h1.ReceberDano(I1.Atacar());
-                System.out.println(I1.nome + "ataca com "+ I1.ataque + " de dano. ("+h1.vida+"/20 de vida restantes)");
+                System.out.println(I1.nome + " ataca com "+ I1.ataque + " de dano. ("+h1.vida+"/20 de vida restantes)");
             }
             System.out.println();
             
