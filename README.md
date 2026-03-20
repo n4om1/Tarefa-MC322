@@ -14,7 +14,7 @@ Você também pode obter o URL clicando no botão verde escrito "Code" e copiand
 
 Com esse comando, será criada uma pasta com uma cópia de todos os arquivos do repositório. Depois disso, é possível entrar nessa pasta com o comando `cd`:
 
-* `cd repo.git`
+* `cd Tarefa-MC322.git`
 
 Para compilar e executar o programa, use os seguintes comandos:
 
