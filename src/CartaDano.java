@@ -1,37 +1,19 @@
-public class CartaDano {
-    
-    String nome;
-    int custo;
-    int dano;
-    int quantidade = 0;
+public class CartaDano extends Carta {
 
-    CartaDano(String nome, int custo, int dano){
-        this.nome = nome;
-        this.custo = custo;
+    private int dano;
+
+    public CartaDano(String nome, int custo, int dano) {
+        super(nome, "Causa " + dano + " de dano ao inimigo.", custo);
         this.dano = dano;
     }
 
-    String descrição(){
-        String message = nome + " Custo: " + custo + " Dano: "+ dano;
-        return message;
+    // Causa dano a um inimigo quando utilizada
+    @Override
+    public void Usar(Heroi heroi, Inimigo inimigo) {
+        System.out.println(heroi.getNome() + " usa " + getNome() + " e causa " + dano + " de dano em " + inimigo.getNome() + "!");
+        inimigo.ReceberDano(dano);
+        System.out.println(inimigo.getNome() + ": " + inimigo.getVida() + "/" + inimigo.getVidaMaxima() + " de vida.");
     }
 
-    void aumenta_numero_cartas(){
-        this.quantidade = quantidade + 1;
-    }
-
-    //quando se esgota as cartas durante um turno retorna verdadeiro caso contrário, retorna falso
-    boolean vazio(){ 
-        if (quantidade == 0){
-            return true;
-        }
-        return false;
-    }
-
-    int usar(String nome, int dano){
-        System.out.println("Heroi usa " + nome + " contra Inimigo");
-        return dano;
-    }
-        
-    
+    public int getDano() { return dano; }
 }

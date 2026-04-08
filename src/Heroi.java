@@ -1,34 +1,28 @@
-public class Heroi {
+public class Heroi extends Entidade {
 
-    String nome;
-    int vida;
-    int escudo;
+    private int energiaMaxima;
+    private int energiaAtual;
 
-    Heroi(String nome, int vida, int escudo){
-        this.nome = nome;
-        this.vida = vida;
-        this.escudo = escudo;
+    public Heroi(String nome, int vida, int energiaMaxima) {
+        super(nome, vida);
+        this.energiaMaxima = energiaMaxima;
+        this.energiaAtual = energiaMaxima;
     }
 
-    int ReceberDano(int dano){
-        int vida_final = vida - dano;
-        if (vida_final > 20)
-            vida_final = 20;
-        else if (vida < 0)
-            vida_final = 0;
-        return vida_final;
+    // Restaura energia ao máximo (chamado no início de cada turno)
+    public void RecuperarEnergia() {
+        energiaAtual = energiaMaxima;
     }
 
-    int ReceberEscudo(int protecao){
-        vida = vida + protecao;
-        return vida;
-    }
-
-    Boolean EstaVivo(){
-        if (vida > 0){
+    // Tenta gastar energia; retorna false se não houver energia suficiente
+    public boolean GastarEnergia(int custo) {
+        if (energiaAtual >= custo) {
+            energiaAtual -= custo;
             return true;
         }
         return false;
-    }  
+    }
 
+    public int getEnergiaAtual() { return energiaAtual; }
+    public int getEnergiaMaxima() { return energiaMaxima; }
 }

@@ -1,125 +1,120 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        CartaDano cDano1 = new CartaDano("Espada", 1, 3);
-        CartaEscudo cEscudo1 = new CartaEscudo("Escudo", 2, 5);
-
-        Heroi h1 = new Heroi("Herói", 20, cEscudo1.quantidade);
-        Inimigo I1 = new Inimigo("Inimigo", cEscudo1.quantidade, 10, 3);
+    public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
-        Scanner item = new Scanner(System.in);
-   
-        while (h1.EstaVivo()) {
-             //loja disponível para comprar novas cartas em cada turno:
-            
-            int carta;
-            boolean uso_loja = true;
-            while (uso_loja) {
-                
-                System.out.println("loja");
-                System.out.println("Digite o número correspondente à carta para comprá-la ou pressione 0 para fechar a loja");
-                System.out.println("1 - " + cDano1.descrição());
-                System.out.println("2 - " + cEscudo1.descrição());
-                System.out.println("0 - fechar loja");
-                System.out.println();
-                carta = item.nextInt();
-                switch (carta) {
-                    case 1:
-                        cDano1.aumenta_numero_cartas();
-                        break;
-                    case 2:
-                        cEscudo1.aumenta_numero_cartas();
-                        break;
-                    default:
-                        uso_loja = false;
-                        break;
-                }
-            }
-            int Energia = 3;
-            
-            System.out.println(h1.nome + "(" + h1.vida + "/20)");
-            System.out.println("vs");
-            System.out.println(I1.nome + "(" + I1.vida + "/10)");
 
-            int dano;
-            int protecao = 0;
-            while (Energia > 0){
+        // Instancia o herói e o inimigo
+        Heroi heroi = new Heroi("Herói", 40, 3);
+        Inimigo inimigo = new Inimigo("Rato Gigante", 30, 7);
 
-                System.out.println("=======");
-                System.out.println("Energia disponível: " + Energia + "/3)");
-                System.out.println("Escolha sua próxima ação:");
-                System.out.println("1 - Usar Carta de Dano");
-                System.out.println("2 - Usar Carda de Escudo");
-                System.out.println("3 - Encerrar turno");
-                System.out.println("=======");
-                System.out.println();
+        // Monta o baralho com cartas variadas
+        Baralho baralho = new Baralho();
+        baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
+        baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
+        baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12));
+        baralho.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
+        baralho.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
+        baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
+        baralho.AdicionarCarta(new CartaEscudo("Barreira", 2, 10));
+        baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12));
+        baralho.Embaralhar();
 
-                int key = entrada.nextInt();
-                
-                switch (key) {
-                    case 1:
-                        if(cDano1.vazio()){
-                            System.out.println("Já se usaram todas as cartas desse tipo");
-                            break;
-                        }
-                        dano = cDano1.usar(cDano1.nome, cDano1.dano);
-                        cDano1.quantidade--;
-                        I1.vida = I1.ReceberDano(dano);
-                        Energia = Energia - cDano1.custo;
-                        break;
-                    case 2:
-                        if(cEscudo1.vazio()){
-                            System.out.println("Já se usaram todas as cartas desse tipo");
-                            break;
-                        }
-                        protecao = cEscudo1.usar(cEscudo1.nome);
-                        cEscudo1.quantidade--;
-                        h1.vida = h1.ReceberEscudo(protecao);
-                        Energia = Energia - cEscudo1.custo;
-                        break;
-                    case 3:
-                        break;  //encerrar turno
-                }
-                if (key == 3)
-                    break;
-                if (Energia == 0)
-                    break;
-                if (!I1.EstaVivo())
-                    break;
-            }
+        System.out.println("Prepare-se para batalhar!");
 
-            if(!I1.EstaVivo()){
-                System.out.println("O(A) " + I1.nome + " é derrotada.");
-                break;
-            }else if (!h1.EstaVivo()){
-                System.out.println("O(A) " + h1.nome + " é derrotada.");
-                break;
-            }else if (cDano1.quantidade > 0 || cEscudo1.quantidade > 0 && Energia == 0){
-                System.out.println("O jogador encerra o turno (sem energia) e descarta a cartas que sobraram.");
-                cDano1.quantidade = 0;
-                cEscudo1.quantidade=0;
-            }else if (Energia > 0)
-                System.out.println("O jogador encerra o turno");
-            else
-                System.out.println("O jogador encerra o turno (sem energia)");
-            
+        int turno = 1;
+
+        while (heroi.EstaVivo() && inimigo.EstaVivo()) {
+            System.out.println("=================");
+            System.out.println("  TURNO " + turno);
+            System.out.println("=================");
+
+            // Início do turno: recupera energia, zera escudo, compra cartas
+            heroi.RecuperarEnergia();
+            heroi.ZerarEscudo();
+            baralho.ComprarCartas(5);
+
+            // Exibe status e intenção do inimigo (desafio extra)
+            System.out.println(heroi.getNome() + ": " + heroi.getVida() + "/" + heroi.getVidaMaxima()
+                    + " de vida | " + heroi.getEscudo() + " de escudo");
+            System.out.println(inimigo.getNome() + ": " + inimigo.getVida() + "/" + inimigo.getVidaMaxima()
+                    + " de vida");
+            System.out.println("[!] " + inimigo.AnunciarIntencao());
+            System.out.println("Compra: " + baralho.getTamanhoCompra()
+                    + " | Descarte: " + baralho.getTamanhoDescarte());
             System.out.println();
 
-            //vez do inimigo
+            // Turno do jogador
+            while (heroi.getEnergiaAtual() > 0 && !baralho.MaoVazia() && inimigo.EstaVivo()) {
+                ArrayList<Carta> mao = baralho.getMao();
 
-            if (protecao > 0){
-                h1.vida = h1.ReceberDano(I1.Atacar());
-                System.out.println(I1.nome + " ataca com "+ I1.ataque + " de dano. A defesa absorve parte do dano ("+h1.vida+"/20 de vida restantes)");
-            }else{
-                h1.vida = h1.ReceberDano(I1.Atacar());
-                System.out.println(I1.nome + " ataca com "+ I1.ataque + " de dano. ("+h1.vida+"/20 de vida restantes)");
+                System.out.println("--- Energia: " + heroi.getEnergiaAtual() + "/" + heroi.getEnergiaMaxima() + " ---");
+                System.out.println("Sua mão:");
+                for (int i = 0; i < mao.size(); i++) {
+                    System.out.println("  " + (i + 1) + " - " + mao.get(i).Descricao());
+                }
+                System.out.println("  0 - Encerrar turno");
+                System.out.print("Escolha: ");
+
+                int escolha = entrada.nextInt();
+
+                if (escolha == 0) break;
+
+                if (escolha < 1 || escolha > mao.size()) {
+                    System.out.println("Opção inválida.");
+                    continue;
+                }
+
+                Carta cartaEscolhida = mao.get(escolha - 1);
+
+                if (!heroi.GastarEnergia(cartaEscolhida.getCusto())) {
+                    System.out.println("Energia insuficiente para usar " + cartaEscolhida.getNome() + "!");
+                    continue;
+                }
+
+                cartaEscolhida.Usar(heroi, inimigo);
+                baralho.DescartarCarta(escolha - 1);
+                System.out.println();
+
+                if (!inimigo.EstaVivo()) break;
             }
+
+            // Cartas não jogadas vão para o descarte
+            if (!baralho.MaoVazia()) {
+                System.out.println("Cartas restantes na mão vão para o descarte.");
+                baralho.DescartarMao();
+            }
+
+            if (!inimigo.EstaVivo()) break;
+
+            // Turno do inimigo
             System.out.println();
-            
+            System.out.println("--- Vez do " + inimigo.getNome() + " ---");
+            inimigo.Atacar(heroi);
+
+            if (heroi.getEscudo() > 0) {
+                System.out.println(inimigo.getNome() + " ataca com " + inimigo.getDano()
+                        + " de dano. O escudo absorve parte do golpe! "
+                        + heroi.getNome() + ": " + heroi.getVida() + "/" + heroi.getVidaMaxima() + " de vida.");
+            } else {
+                System.out.println(inimigo.getNome() + " ataca com " + inimigo.getDano()
+                        + " de dano! " + heroi.getNome() + ": " + heroi.getVida() + "/" + heroi.getVidaMaxima() + " de vida.");
+            }
+
+            System.out.println();
+            turno++;
         }
-        item.close();
+
+        // Resultado final
+        System.out.println("=================");
+        if (!inimigo.EstaVivo()) {
+            System.out.println("Vitória! " + inimigo.getNome() + " foi derrotado em " + (turno - 1) + " turno(s)!");
+        } else {
+            System.out.println("Derrota! " + heroi.getNome() + " foi derrotado...");
+        }
+        System.out.println("=================");
+
         entrada.close();
     }
 }
-

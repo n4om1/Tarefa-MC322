@@ -1,36 +1,21 @@
-public class Inimigo {
+public class Inimigo extends Entidade {
 
-    String nome;
-    int escudo;
-    int vida;
-    int ataque;
+    private int dano;
 
-    Inimigo(String nome, int escudo, int vida, int ataque){
-        this.nome = nome;
-        this.escudo = escudo;
-        this.vida = vida;
-        this.ataque = ataque;
-
+    public Inimigo(String nome, int vida, int dano) {
+        super(nome, vida);
+        this.dano = dano;
     }
 
-    int ReceberDano(int dano){
-        int vida_final = vida - dano;
-        if (vida_final < 0)
-            vida_final = 0;
-        System.out.println(nome + " recebe " + dano + " de dano ("+ vida_final +"/10 restantes)");
-        return vida_final;
+    // Realiza um ataque contra o herói
+    public void Atacar(Heroi heroi) {
+        heroi.ReceberDano(dano);
     }
 
-    int Atacar(){
-        int dano = ataque;
-        return dano;
+    // Desafio extra: anuncia a intenção de ataque no início do turno
+    public String AnunciarIntencao() {
+        return getNome() + " pretende causar " + dano + " de dano.";
     }
 
-    Boolean EstaVivo(){
-        if (vida > 0){
-            return true;
-        }
-        return false;
-    }  
-
+    public int getDano() { return dano; }
 }
