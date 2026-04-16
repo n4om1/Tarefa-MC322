@@ -9,7 +9,7 @@ public class CartaDano extends Carta {
 
     // Causa dano a um inimigo quando utilizada
     @Override
-    public void Usar(Heroi heroi, Inimigo inimigo) {
+    public void Usar(Heroi heroi, Inimigo inimigo, Combate combate) {
         System.out.println(heroi.getNome() + " usa " + getNome() + " e causa " + dano + " de dano em " + inimigo.getNome() + "!");
         inimigo.ReceberDano(dano);
         System.out.println(inimigo.getNome() + ": " + inimigo.getVida() + "/" + inimigo.getVidaMaxima() + " de vida.");

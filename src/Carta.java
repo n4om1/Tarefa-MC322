@@ -1,4 +1,4 @@
-public public abstract class Carta {
+public abstract class Carta {
 
     private String nome;
     private String descricao;
@@ -10,8 +10,8 @@ public public abstract class Carta {
         this.custo = custo;
     }
 
-    // Executa o efeito da carta
-    public abstract void Usar(Heroi heroi, Inimigo inimigo);
+    // Executa o efeito da carta; recebe o combate para que cartas de efeito possam inscrever subscribers
+    public abstract void Usar(Heroi heroi, Inimigo inimigo, Combate combate);
 
     public String getNome() { return nome; }
     public String getDescricao() { return descricao; }
@@ -20,6 +20,4 @@ public public abstract class Carta {
     public String Descricao() {
         return nome + " [Custo: " + custo + "] - " + descricao;
     }
-} {
-    
 }

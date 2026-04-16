@@ -9,7 +9,7 @@ public class CartaEscudo extends Carta {
 
     // Dá escudo ao herói quando utilizada
     @Override
-    public void Usar(Heroi heroi, Inimigo inimigo) {
+    public void Usar(Heroi heroi, Inimigo inimigo, Combate combate) {
         System.out.println(heroi.getNome() + " usa " + getNome() + " e ganha " + protecao + " de escudo!");
         heroi.GanharEscudo(protecao);
         System.out.println(heroi.getNome() + ": escudo atual = " + heroi.getEscudo() + ".");

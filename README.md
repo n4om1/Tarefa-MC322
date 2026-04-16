@@ -1,25 +1,34 @@
-# RPG GAME
+# RPG Game — MC322 Tarefa 3
 
-## Introdução
+## Descrição
 
-O jogo implementado tem como inspiração jogos de RPG online que utilizam sistemas de cartas para batalhar contra inimigos, usando um herói escolhido. Criamos algo parecido com o jogo *Slay the Spire*.
+Jogo de batalha em turnos baseado em *Slay the Spire*. O jogador controla um Herói que enfrenta um inimigo utilizando cartas compradas de um baralho. Esta versão introduz um sistema de **efeitos** implementado com o padrão de design **Observer**.
 
-## Como baixar o repositório, compilar e executar o jogo
+## Efeitos implementados
 
-Primeiramente, é necessário criar um clone do repositório para depois compilá-lo. Para isso, escreva em seu terminal:
+**Veneno:** ao final do turno do jogador, a entidade afligida sofre X de dano e perde 1 acúmulo. Quando os acúmulos chegam a zero, o efeito se dissipa.
 
-* `git clone git@github.com:n4om1/Tarefa-MC322.git`
+**Força:** quando a entidade afligida realiza um ataque, causa X de dano adicional. É aplicado pelo inimigo em si mesmo.
 
-Você também pode obter o URL clicando no botão verde escrito "Code" e copiando-o da aba SSH.
+**Fraqueza:** quando a entidade afligida realiza um ataque, causa X de dano a menos. É aplicada pelo jogador via carta.
 
-Com esse comando, será criada uma pasta com uma cópia de todos os arquivos do repositório. Depois disso, é possível entrar nessa pasta com o comando `cd`:
+## Cartas que aplicam efeitos
 
-* `cd Tarefa-MC322.git`
+**Frasco de Veneno** (Custo 1): aplica 3 acúmulos de Veneno ao inimigo.
 
-Para compilar e executar o programa, use os seguintes comandos:
+**Golpe Enfraquecedor** (Custo 1): aplica 2 acúmulos de Fraqueza ao inimigo, reduzindo seu ataque.
 
-* `javac -d bin $(find src -name "*.java")`
-* `java -cp bin App`
+## Padrão Observer
+**Combate** atua como **Publisher**: notifica os efeitos ativos sobre eventos do combate (**FIM_TURNO_JOGADOR**, **ATAQUE**). Cada Efeito é um **Subscriber** que reage apenas ao evento relevante para ele.
 
-E o jogo já estará pronto para ser jogado.
+## Como compilar
 
+```bash
+javac -d bin $(find src -name "*.java")
+```
+
+## Como executar
+
+```bash
+java -cp bin App
+```
