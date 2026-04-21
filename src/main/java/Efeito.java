@@ -1,4 +1,4 @@
-//package main.java;
+//package main.java
 
 public abstract class Efeito implements Subscriber {
 

@@ -32,9 +32,16 @@ dependencies {
 
 plugins {
     id 'application'
+    id 'java'
 }
 mainClassName = 'App' 
 
 run {
     standardInput = System.in
+}
+
+javadoc {
+    destinationDir = file("(${buildDir}/docs/javadoc)")
+
+    options.memberLevel = javadocMemberLevel.PRIVATE
 }
