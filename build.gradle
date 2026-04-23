@@ -43,5 +43,5 @@ run {
 javadoc {
     destinationDir = file("(${buildDir}/docs/javadoc)")
 
-    options.memberLevel = javadocMemberLevel.PRIVATE
+    //options.memberLevel = javadocMemberLevel.PRIVATE
 }

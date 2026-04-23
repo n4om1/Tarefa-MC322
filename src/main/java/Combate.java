@@ -1,18 +1,38 @@
-//package main.java;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Motor principal do jogo que gerencia o fluxo de combate entre o Herói e o Inimigo.
+ * Esta classe atua como um {@link Publisher} no padrão Observer, notificando 
+ * interessados sobre eventos críticos como ataques e encerramento de turnos.
+ */
 public class Combate extends Publisher {
 
+    /** O protagonista controlado pelo jogador. */
     private Heroi heroi;
+    
+    /** O adversário controlado pela lógica automática. */
     private Inimigo inimigo;
+    
+    /** O gerenciador de cartas disponível para o herói. */
     private Baralho baralho;
+    
+    /** Leitor de entrada para capturar as escolhas do jogador. */
     private Scanner entrada;
 
-    // Usados pelo padrão Observer para calcular dano de ataque com efeitos
+    /** Bônus de dano calculado dinamicamente por efeitos (Força, Fraqueza, etc). */
     private int danoBonus;
+    
+    /** Referência para a entidade que está realizando a ação ofensiva no momento. */
     private Entidade atacante;
 
+    /**
+     * Inicializa uma nova instância de combate.
+     * @param heroi O herói participante.
+     * @param inimigo O inimigo participante.
+     * @param baralho O baralho configurado para a partida.
+     * @param entrada O scanner para leitura de dados do console.
+     */
     public Combate(Heroi heroi, Inimigo inimigo, Baralho baralho, Scanner entrada) {
         this.heroi = heroi;
         this.inimigo = inimigo;
@@ -21,18 +41,40 @@ public class Combate extends Publisher {
         this.danoBonus = 0;
     }
 
-    // Notifica efeitos sobre um ataque e registra o atacante para que efeitos como Força e Fraqueza possam reagir
+    /**
+     * Notifica os observadores de que um ataque está prestes a ocorrer.
+     * Reinicia o bônus de dano e permite que efeitos inscritos (como Força ou Fraqueza) 
+     * modifiquem o valor final do dano através do método {@link #AddDanoBonus(int)}.
+     * @param atacante A {@link Entidade} que está desferindo o golpe.
+     */
     public void NotificarAtaque(Entidade atacante) {
         this.atacante = atacante;
         this.danoBonus = 0;
         notificar("ATAQUE", this);
     }
 
+    /** 
+     * Entidade que está atacando
+     * 
+     * @return A entidade que está atacando no momento. */
     public Entidade getAtacante() { return atacante; }
+
+    /**
+     * Adiciona um valor ao modificador de dano do ataque atual.
+     * @param bonus Valor (positivo ou negativo) a ser somado ao dano base.
+     */
     public void AddDanoBonus(int bonus) { danoBonus += bonus; }
+
+    /** 
+     * Danos acumulados pelos efeitos
+     * @return O modificador total de dano acumulado pelos efeitos. */
     public int getDanoBonus() { return danoBonus; }
 
-    // Loop principal de batalha
+    /**
+     * Inicia o loop principal da batalha.
+     * O combate continua até que uma das entidades tenha seus pontos de vida zerados.
+     * Gerencia a sequência: Início de Turno -> Turno do Jogador -> Turno do Inimigo.
+     */
     public void Executar() {
         int turno = 1;
 
@@ -80,6 +122,10 @@ public class Combate extends Publisher {
         System.out.println("=================");
     }
 
+    /**
+     * Gerencia a fase de decisão do jogador.
+     * Permite o uso de cartas enquanto houver energia disponível e cartas na mão.
+     */
     private void TurnoJogador() {
         while (heroi.getEnergiaAtual() > 0 && !baralho.MaoVazia() && inimigo.EstaVivo()) {
             ArrayList<Carta> mao = baralho.getMao();
@@ -121,6 +167,10 @@ public class Combate extends Publisher {
         }
     }
 
+    /**
+     * Gerencia a fase de ação do inimigo.
+     * Delega ao objeto {@link Inimigo} a execução de sua lógica interna.
+     */ 
     private void TurnoInimigo() {
         System.out.println("--- Vez do " + inimigo.getNome() + " ---");
         inimigo.ExecutarAcao(heroi, this);
