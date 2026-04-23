@@ -2,8 +2,6 @@
  * Implementação de {@link Efeito} que causa dano periódico ao longo do tempo.
  * O Veneno é um debuff que reduz a vida da entidade afetada a cada ciclo de turno,
  * perdendo intensidade (acúmulos) gradualmente até desaparecer.
- * * @author Seu Nome
- * @version 1.0
  */
 public class EfeitoVeneno extends Efeito {
 

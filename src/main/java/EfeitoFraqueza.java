@@ -2,8 +2,6 @@
  * Implementação de {@link Efeito} que reduz a capacidade ofensiva da entidade.
  * O efeito de Fraqueza atua subtraindo um valor fixo do dano total causado pelo 
  * dono do efeito sempre que este realiza um ataque.
- * * @author Seu Nome
- * @version 1.0
  */
 public class EfeitoFraqueza extends Efeito {
 
