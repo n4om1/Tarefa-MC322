@@ -37,14 +37,19 @@ public class App {
         Baralho baralho = new Baralho();
         baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
         baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
+        baralho.AdicionarCarta(new CartaDano("Bola de fogo", 2, 8));
+        baralho.AdicionarCarta(new CartaDano("Espinho", 2, 8));
         baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12));
         baralho.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
         baralho.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
         baralho.AdicionarCarta(new CartaEscudo("Barreira", 2, 10));
+        baralho.AdicionarCarta(new CartaEscudo("Parede de terra", 1, 10));
+        baralho.AdicionarCarta(new CartaEscudo("Parede de ferro", 2, 15));
         baralho.AdicionarCarta(new CartaVeneno("Frasco de Veneno", 1, 3));
         baralho.AdicionarCarta(new CartaVeneno("Frasco de Veneno", 1, 3));
         baralho.AdicionarCarta(new CartaFraqueza("Golpe Enfraquecedor", 1, 2));
-        baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12));
+        baralho.AdicionarCarta(new CartaFraqueza("Golpe Atordoante", 1, 2));
+        baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12)); 
         baralho.Embaralhar();
 
         System.out.println("Prepare-se para batalhar!");
