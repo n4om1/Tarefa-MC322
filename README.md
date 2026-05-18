@@ -1,34 +1,33 @@
-# RPG Game — MC322 Tarefa 3
+# RPG Game — MC322 Tarefa 4
 
 ## Descrição
 
 Jogo de batalha em turnos baseado em *Slay the Spire*. O jogador controla um Herói que enfrenta um inimigo utilizando cartas compradas de um baralho. Esta versão introduz um sistema de **efeitos** implementado com o padrão de design **Observer**.
 
-## Efeitos implementados
+## Documentação implementada
 
-**Veneno:** ao final do turno do jogador, a entidade afligida sofre X de dano e perde 1 acúmulo. Quando os acúmulos chegam a zero, o efeito se dissipa.
+Foi feita uma documentação em todo código de forma bem detalhada sobre o funcionamento do programa com o auxilio de uma LLM.
 
-**Força:** quando a entidade afligida realiza um ataque, causa X de dano adicional. É aplicado pelo inimigo em si mesmo.
+## Novas cartas implementadas
 
-**Fraqueza:** quando a entidade afligida realiza um ataque, causa X de dano a menos. É aplicada pelo jogador via carta.
+**Bola de fogo** (Custo 2): aplica 8 de dano ao inimigo.
 
-## Cartas que aplicam efeitos
+**Espinho** (Custo 2): aplica 8 de Dano ao inimigo.
 
-**Frasco de Veneno** (Custo 1): aplica 3 acúmulos de Veneno ao inimigo.
+**Parede de terra** (Custo 1): aplica 10 de Defesa ao herói.
 
-**Golpe Enfraquecedor** (Custo 1): aplica 2 acúmulos de Fraqueza ao inimigo, reduzindo seu ataque.
+**Parede de ferro** (Custo 2): aplica 15 de Defesa ao herói.
 
-## Padrão Observer
-**Combate** atua como **Publisher**: notifica os efeitos ativos sobre eventos do combate (**FIM_TURNO_JOGADOR**, **ATAQUE**). Cada Efeito é um **Subscriber** que reage apenas ao evento relevante para ele.
+**Golpe atordoante** (Custo 1): aplica 2 acumulo de Fraqueza ao inimigo, reduzindo seu ataque.
 
 ## Como compilar
 
 ```bash
-javac -d bin $(find src -name "*.java")
+./gradlew build
 ```
 
 ## Como executar
 
 ```bash
-java -cp bin App
+./gradlew run
 ```
