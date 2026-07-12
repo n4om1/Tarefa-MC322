@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Entidade.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Entidade.java</span></div><h1>Entidade.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+
+/**
+ * Classe abstrata base que define os atributos e comportamentos comuns a todos 
+ * os seres combatentes no jogo (Heróis e Inimigos).
+ * Gerencia o estado vital, sistemas de defesa (escudo) e a lista de efeitos 
+ * reativos aplicados à entidade.
+ */
+public abstract class Entidade {
+
+    /** O nome identificador da entidade. */
+    private String nome;
+
+    /** Os pontos de vida atuais da entidade. */
+    private int vida;
+
+    /** O limite máximo de pontos de vida que esta entidade pode possuir. */
+    private int vidaMaxima;
+
+    /** Pontos de defesa temporários que absorvem dano antes de afetar a vida. */
+    private int escudo;
+
+    /** Lista de modificadores de estado (buffs/debuffs) ativos na entidade. */
+    private ArrayList&lt;Efeito&gt; efeitos;
+
+    /**
+     * Construtor para inicializar uma entidade com vida plena e sem efeitos.
+     * 
+     * @param nome O nome da entidade.
+     * @param vida O valor inicial e máximo de pontos de vida.
+     */
+<span class="fc" id="L32">    public Entidade(String nome, int vida) {</span>
+<span class="fc" id="L33">        this.nome = nome;</span>
+<span class="fc" id="L34">        this.vida = vida;</span>
+<span class="fc" id="L35">        this.vidaMaxima = vida;</span>
+<span class="fc" id="L36">        this.escudo = 0;</span>
+<span class="fc" id="L37">        this.efeitos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Processa a redução de pontos de vida da entidade.
+     * O cálculo prioriza a redução do escudo; apenas o excedente do dano 
+     * que ultrapassar o valor do escudo é subtraído da vida atual.
+     * 
+     * @param dano O valor bruto de dano a ser aplicado.
+     */
+    public void ReceberDano(int dano) {
+<span class="fc" id="L48">        int danoRestante = dano - escudo;</span>
+<span class="fc" id="L49">        escudo = Math.max(0, escudo - dano);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (danoRestante &gt; 0) {</span>
+<span class="fc" id="L51">            vida = Math.max(0, vida - danoRestante);</span>
+        }
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Incrementa o valor de defesa temporária da entidade.
+     * @param quantidade Valor a ser somado ao escudo atual.
+     */
+    public void GanharEscudo(int quantidade) {
+<span class="fc" id="L60">        escudo += quantidade;</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Verifica se a entidade possui pontos de vida acima de zero.
+     * @return {@code true} se a vida for maior que 0; {@code false} caso contrário.
+     */
+    public boolean EstaVivo() {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        return vida &gt; 0;</span>
+    }
+
+    /**
+     * Adiciona ou atualiza um efeito na entidade.
+     * Se um efeito com o mesmo nome já existir, os acúmulos são somados. 
+     * Caso seja um efeito novo, ele é adicionado à lista e inscrito como 
+     * um observador no objeto {@link Combate}.
+     * @param efeito O efeito a ser aplicado.
+     * @param combate A instância de combate onde o efeito será registrado como subscriber.
+     */
+    public void AplicarEfeito(Efeito efeito, Combate combate) {
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        for (Efeito e : efeitos) {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (e.getNome().equals(efeito.getNome())) {</span>
+<span class="nc" id="L82">                e.AdicionarAcumulos(efeito.getAcumulos());</span>
+<span class="nc" id="L83">                System.out.println(&quot;[Efeito] &quot; + getNome() + &quot; agora tem &quot; + e.getAcumulos() + &quot; acúmulos de &quot; + e.getNome() + &quot;.&quot;);</span>
+<span class="nc" id="L84">                return;</span>
+            }
+<span class="nc" id="L86">        }</span>
+<span class="nc" id="L87">        efeitos.add(efeito);</span>
+<span class="nc" id="L88">        combate.inscrever(efeito);</span>
+<span class="nc" id="L89">        System.out.println(&quot;[Efeito] &quot; + getNome() + &quot; foi afligido por &quot; + efeito.getString() + &quot;.&quot;);</span>
+<span class="nc" id="L90">    }</span>
+
+    /**
+     * Remove um efeito específico da entidade.
+     * Além de remover da lista interna, o efeito é desinscrito do sistema 
+     * de notificações do combate.
+     * @param efeito O objeto de efeito a ser removido.
+     * @param combate A instância de combate para desinscrição do subscriber.
+     */
+    public void RemoverEfeito(Efeito efeito, Combate combate) {
+<span class="nc" id="L100">        efeitos.remove(efeito);</span>
+<span class="nc" id="L101">        combate.desinscrever(efeito);</span>
+<span class="nc" id="L102">    }</span>
+
+    /**
+     * Constrói uma representação textual formatada de todos os efeitos ativos.
+     * Útil para exibição de status no console. Ex: &quot; [Veneno(3), Força(2)]&quot;.
+     * @return Uma String contendo a lista de efeitos ou uma string vazia se não houver nenhum.
+     */ 
+    public String getEfeitosString() {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (efeitos.isEmpty()) return &quot;&quot;;</span>
+<span class="nc" id="L111">        StringBuilder sb = new StringBuilder(&quot; [&quot;);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (int i = 0; i &lt; efeitos.size(); i++) {</span>
+<span class="nc" id="L113">            sb.append(efeitos.get(i).getString());</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">            if (i &lt; efeitos.size() - 1) sb.append(&quot;, &quot;);</span>
+        }
+<span class="nc" id="L116">        sb.append(&quot;]&quot;);</span>
+<span class="nc" id="L117">        return sb.toString();</span>
+    }
+
+    /**
+     * Reseta os pontos de escudo para zero.
+     * Geralmente invocado no início de cada turno para evitar acúmulo infinito de defesa.
+     */
+    public void ZerarEscudo() {
+<span class="fc" id="L125">        escudo = 0;</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Nome da entidade.
+     * 
+     * @return O nome da entidade. */
+<span class="nc" id="L132">    public String getNome() { return nome; }</span>
+
+    /** 
+     * Vida atual.
+     * 
+     * @return O valor de vida atual. */
+<span class="fc" id="L138">    public int getVida() { return vida; }</span>
+
+    /**
+     * Limite máximo de vida da entidade.
+     * 
+     *  @return O limite máximo de vida definido na criação. */
+<span class="nc" id="L144">    public int getVidaMaxima() { return vidaMaxima; }</span>
+
+    /**
+     *  Valor de proteção atual.
+     * 
+     *  @return O valor atual de proteção (escudo). */
+<span class="fc" id="L150">    public int getEscudo() { return escudo; }</span>
+
+    /**
+     * Todos os efeitos aplicados a esta entidade.
+     * 
+     *  @return A lista de todos os efeitos aplicados a esta entidade. */
+<span class="fc" id="L156">    public ArrayList&lt;Efeito&gt; getEfeitos() { return efeitos; }</span>
+
+    /**
+     * Remove todos os efeitos ativos da entidade sem interagir com o Publisher.
+     * Deve ser chamado entre batalhas para garantir que o herói inicie cada
+     * combate sem buffs ou debuffs residuais da batalha anterior.
+     */
+    public void LimparEfeitos() {
+<span class="fc" id="L164">        efeitos.clear();</span>
+<span class="fc" id="L165">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

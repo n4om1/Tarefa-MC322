@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CartaFraqueza.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">CartaFraqueza.java</span></div><h1>CartaFraqueza.java</h1><pre class="source lang-java linenums">/**
+ * Implementação de {@link Carta} que aplica um debuff de redução de poder.
+ * Esta carta não causa dano direto, mas altera o estado do inimigo ao 
+ * aplicar o efeito de Fraqueza, impactando sua capacidade ofensiva futura.
+ */
+public class CartaFraqueza extends Carta {
+
+    /** A quantidade de turnos ou intensidade do efeito de fraqueza a ser aplicado. */
+    private int acumulos;
+
+    /**
+     * Construtor da carta de fraqueza.
+     * Define o nome, custo e gera uma descrição automática explicando que 
+     * o ataque do inimigo será reduzido.
+     *
+     * @param nome O nome da carta (ex: &quot;Olhar Intimidador&quot;, &quot;Grito de Guerra&quot;).
+     * @param custo O custo de energia para utilizar a carta.
+     * @param acumulos A intensidade do efeito (geralmente duração em turnos).
+     */
+    public CartaFraqueza(String nome, int custo, int acumulos) {
+<span class="nc" id="L21">        super(nome, &quot;Aplica &quot; + acumulos + &quot; de Fraqueza ao inimigo, reduzindo seu ataque.&quot;, custo);</span>
+<span class="nc" id="L22">        this.acumulos = acumulos;</span>
+<span class="nc" id="L23">    }</span>
+
+    /**
+     * Aplica o efeito de debuff {@link EfeitoFraqueza} ao inimigo.
+     * O efeito é registrado na lista de efeitos do alvo e gerenciado pelo 
+     * contexto do combate para reduzir o dano do próximo ataque do inimigo.
+     * @param heroi O herói que utiliza a carta.
+     * @param inimigo O alvo que receberá o efeito de fraqueza.
+     * @param combate O contexto do combate onde o efeito será processado e monitorado.
+     */
+    @Override
+    public void Usar(Heroi heroi, Inimigo inimigo, Combate combate) {
+<span class="nc" id="L35">        System.out.println(heroi.getNome() + &quot; usa &quot; + getNome() + &quot; e aplica &quot; + acumulos + &quot; de Fraqueza em &quot; + inimigo.getNome() + &quot;!&quot;);</span>
+<span class="nc" id="L36">        inimigo.AplicarEfeito(new EfeitoFraqueza(inimigo, acumulos), combate);</span>
+<span class="nc" id="L37">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

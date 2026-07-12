@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Batalha.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Batalha.java</span></div><h1>Batalha.java</h1><pre class="source lang-java linenums">import java.util.Scanner;
+
+/**
+ * Encapsula a lógica de um combate individual dentro do sistema de progressão do mapa.
+ * Cada {@link NoMapa} contém uma instância de Batalha que é executada quando o jogador
+ * visita aquele nó. A classe cuida de preparar o estado do herói antes do combate
+ * e de reportar o resultado ao sistema de mapa.
+ */
+public class Batalha {
+
+    /** O inimigo que o jogador enfrentará nesta batalha. */
+    private Inimigo inimigo;
+
+    /**
+     * Construtor da batalha.
+     * @param inimigo O inimigo que participará do combate.
+     */
+<span class="fc" id="L18">    public Batalha(Inimigo inimigo) {</span>
+<span class="fc" id="L19">        this.inimigo = inimigo;</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * Prepara e executa o combate entre o herói e o inimigo.
+     * Antes de iniciar, limpa os efeitos ativos do herói e reinicia o baralho,
+     * mantendo apenas os pontos de vida e a composição do baralho entre batalhas.
+     *
+     * @param heroi   O herói controlado pelo jogador (vida e baralho são mantidos).
+     * @param baralho O baralho do herói (todas as cartas são devolvidas à pilha de compra).
+     * @param entrada O scanner para leitura das escolhas do jogador.
+     * @return {@code true} se o herói venceu; {@code false} se foi derrotado.
+     */
+    public boolean Executar(Heroi heroi, Baralho baralho, Scanner entrada) {
+        // Reseta efeitos e baralho entre batalhas, mantendo vida
+<span class="nc" id="L34">        heroi.LimparEfeitos();</span>
+<span class="nc" id="L35">        baralho.ReiniciarParaNovaBatalha();</span>
+
+<span class="nc" id="L37">        System.out.println(&quot;&gt;&gt;&gt; Batalha contra &quot; + inimigo.getNome() + &quot; (&quot; + inimigo.getVida() + &quot; HP) &lt;&lt;&lt;&quot;);</span>
+<span class="nc" id="L38">        System.out.println();</span>
+
+<span class="nc" id="L40">        Combate combate = new Combate(heroi, inimigo, baralho, entrada);</span>
+<span class="nc" id="L41">        combate.Executar();</span>
+
+<span class="nc" id="L43">        return heroi.EstaVivo();</span>
+    }
+
+    /** @return O inimigo desta batalha. */
+<span class="nc" id="L47">    public Inimigo getInimigo() { return inimigo; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

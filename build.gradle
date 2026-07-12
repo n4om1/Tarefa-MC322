@@ -33,15 +33,38 @@ dependencies {
 plugins {
     id 'application'
     id 'java'
+    id 'jacoco'
 }
-mainClassName = 'App' 
+
+application {
+    mainClass = 'App'
+}
 
 run {
     standardInput = System.in
 }
 
-javadoc {
-    destinationDir = file("(${buildDir}/docs/javadoc)")
+repositories {
+    mavenCentral()
+}
 
-    //options.memberLevel = javadocMemberLevel.PRIVATE
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+javadoc {
+    destinationDir = file("${buildDir}/docs/javadoc")
 }

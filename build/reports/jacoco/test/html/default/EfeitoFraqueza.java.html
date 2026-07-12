@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EfeitoFraqueza.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">EfeitoFraqueza.java</span></div><h1>EfeitoFraqueza.java</h1><pre class="source lang-java linenums">/**
+ * Implementação de {@link Efeito} que reduz a capacidade ofensiva da entidade.
+ * O efeito de Fraqueza atua subtraindo um valor fixo do dano total causado pelo 
+ * dono do efeito sempre que este realiza um ataque.
+ */
+public class EfeitoFraqueza extends Efeito {
+
+    /**
+     * Construtor para o efeito de Fraqueza.
+     * @param dono A entidade que sofrerá a redução de dano.
+     * @param acumulos O valor a ser subtraído do dano causado a cada ataque.
+     */
+    public EfeitoFraqueza(Entidade dono, int acumulos) {
+<span class="nc" id="L14">        super(&quot;Fraqueza&quot;, dono, acumulos);</span>
+<span class="nc" id="L15">    }</span>
+
+    /**
+     * Intercepta o evento de ataque para aplicar a penalidade de dano.
+     * &lt;p&gt;
+     * Se o evento notificado for {@code &quot;ATAQUE&quot;} e o atacante for o dono deste efeito,
+     * o método utiliza um valor negativo dos acúmulos atuais em {@link Combate#AddDanoBonus(int)}
+     * para reduzir o dano final processado.
+     * &lt;/p&gt;
+     * @param evento O tipo de evento disparado pelo {@link Publisher}.
+     * @param combate A instância do combate onde o cálculo de dano está sendo realizado.
+     */
+    @Override
+    public void serNotificado(String evento, Combate combate) {
+        // Fraqueza reduz o dano causado pelo dono ao atacar
+<span class="nc bnc" id="L30" title="All 4 branches missed.">        if (evento.equals(&quot;ATAQUE&quot;) &amp;&amp; combate.getAtacante() == getDono()) {</span>
+<span class="nc" id="L31">            combate.AddDanoBonus(-getAcumulos());</span>
+<span class="nc" id="L32">            System.out.println(&quot;[Fraqueza] &quot; + getDono().getNome() + &quot; está enfraquecido e causa &quot; + getAcumulos() + &quot; de dano a menos!&quot;);</span>
+        }
+<span class="nc" id="L34">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

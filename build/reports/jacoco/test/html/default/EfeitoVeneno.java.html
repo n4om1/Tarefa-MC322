@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EfeitoVeneno.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">EfeitoVeneno.java</span></div><h1>EfeitoVeneno.java</h1><pre class="source lang-java linenums">/**
+ * Implementação de {@link Efeito} que causa dano periódico ao longo do tempo.
+ * O Veneno é um debuff que reduz a vida da entidade afetada a cada ciclo de turno,
+ * perdendo intensidade (acúmulos) gradualmente até desaparecer.
+ */
+public class EfeitoVeneno extends Efeito {
+
+    /**
+     * Construtor para o efeito de Veneno.
+     * @param dono A entidade que sofrerá o dano periódico.
+     * @param acumulos A quantidade inicial de dano e a duração do efeito.
+     */
+    public EfeitoVeneno(Entidade dono, int acumulos) {
+<span class="nc" id="L14">        super(&quot;Veneno&quot;, dono, acumulos);</span>
+<span class="nc" id="L15">    }</span>
+
+    /**
+     * Reage ao evento de encerramento do turno para aplicar o dano.
+     * 
+     * Quando o evento {@code &quot;FIM_TURNO_JOGADOR&quot;} é disparado, o efeito:
+     * &lt;ol&gt;
+     * &lt;li&gt;Causa dano à vida do dono igual ao número atual de acúmulos.&lt;/li&gt;
+     * &lt;li&gt;Reduz em 1 a quantidade de acúmulos.&lt;/li&gt;
+     * &lt;li&gt;Se os acúmulos chegarem a zero, solicita ao dono a remoção do efeito 
+     * e cancela a inscrição no {@link Combate}.&lt;/li&gt;
+     * &lt;/ol&gt;
+     * 
+     * @param evento O tipo de evento notificado.
+     * @param combate A instância do combate para gerenciar a remoção do efeito.
+     */
+    @Override
+    public void serNotificado(String evento, Combate combate) {
+        // Veneno age ao final do turno do jogador
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (evento.equals(&quot;FIM_TURNO_JOGADOR&quot;)) {</span>
+<span class="nc" id="L35">            System.out.println(&quot;[Veneno] &quot; + getDono().getNome() + &quot; sofre &quot; + getAcumulos() + &quot; de dano pelo veneno!&quot;);</span>
+<span class="nc" id="L36">            getDono().ReceberDano(getAcumulos());</span>
+<span class="nc" id="L37">            System.out.println(&quot;[Veneno] &quot; + getDono().getNome() + &quot;: &quot; + getDono().getVida() + &quot;/&quot; + getDono().getVidaMaxima() + &quot; de vida.&quot;);</span>
+<span class="nc" id="L38">            RemoverAcumulos(1);</span>
+
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (getAcumulos() &lt;= 0) {</span>
+<span class="nc" id="L41">                System.out.println(&quot;[Veneno] O efeito de veneno em &quot; + getDono().getNome() + &quot; se dissipou.&quot;);</span>
+<span class="nc" id="L42">                getDono().RemoverEfeito(this, combate);</span>
+            } else {
+<span class="nc" id="L44">                System.out.println(&quot;[Veneno] Acúmulos restantes: &quot; + getAcumulos() + &quot;.&quot;);</span>
+            }
+        }
+<span class="nc" id="L47">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

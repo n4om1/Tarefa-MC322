@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Efeito.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Efeito.java</span></div><h1>Efeito.java</h1><pre class="source lang-java linenums">/**
+ * Classe base abstrata para todos os modificadores de estado (buffs e debuffs).
+ * Implementa a interface {@link Subscriber} para permitir que o efeito reaja 
+ * dinamicamente a eventos disparados durante o {@link Combate}.
+ * * &lt;p&gt;Exemplos de implementação incluem Veneno, Força e Fraqueza.&lt;/p&gt;
+ */
+public abstract class Efeito implements Subscriber {
+
+    /** O nome identificador do efeito (ex: &quot;Veneno&quot;, &quot;Força&quot;). */
+    private String nome;
+
+    /** A {@link Entidade} que está sob a influência deste efeito. */
+    private Entidade dono;
+
+    /** * A intensidade ou duração do efeito. 
+     * O significado exato varia conforme a implementação da subclasse.
+     */
+    private int acumulos;
+
+    /**
+     * Construtor para criar um novo efeito.
+     *
+     * @param nome O nome do efeito.
+     * @param dono A entidade que receberá o efeito.
+     * @param acumulos A quantidade inicial de acúmulos/intensidade.
+     */
+<span class="nc" id="L27">    public Efeito(String nome, Entidade dono, int acumulos) {</span>
+<span class="nc" id="L28">        this.nome = nome;</span>
+<span class="nc" id="L29">        this.dono = dono;</span>
+<span class="nc" id="L30">        this.acumulos = acumulos;</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * Define a lógica de reação do efeito quando um evento ocorre no combate.
+     * Este método é chamado pelo {@link Publisher} sempre que uma notificação relevante é disparada.
+     *
+     * @param evento O tipo de evento ocorrido (ex: &quot;ATAQUE&quot;, &quot;FIM_TURNO_JOGADOR&quot;).
+     * @param combate A instância do combate atual para consulta ou alteração de estado.
+     */
+    @Override
+    public abstract void serNotificado(String evento, Combate combate);
+
+    /**
+     * Gera uma representação textual do efeito para exibição na interface.
+     * Exemplo: &quot;Veneno(3)&quot;
+     * @return Uma String formatada com o nome e a quantidade de acúmulos.
+     */
+    public String getString() {
+<span class="nc" id="L49">        return nome + &quot;(&quot; + acumulos + &quot;)&quot;;</span>
+    }
+
+    /**
+     * Incrementa a intensidade do efeito.
+     * @param quantidade Valor a ser adicionado aos acúmulos atuais.
+     */
+    public void AdicionarAcumulos(int quantidade) {
+<span class="nc" id="L57">        acumulos += quantidade;</span>
+<span class="nc" id="L58">    }</span>
+
+    /**
+     * Decrementa a intensidade do efeito.
+     * @param quantidade Valor a ser subtraído dos acúmulos atuais.
+     */
+    public void RemoverAcumulos(int quantidade) {
+<span class="nc" id="L65">        acumulos -= quantidade;</span>
+<span class="nc" id="L66">    }</span>
+
+    /** 
+     * Nome do efeito
+     * 
+     * @return O nome do efeito. */
+<span class="nc" id="L72">    public String getNome() { return nome; }</span>
+
+    /** 
+     * Entidade dona do efeito
+     * 
+     * @return A entidade que possui o efeito. */
+<span class="nc" id="L78">    public Entidade getDono() { return dono; }</span>
+
+    /** 
+     * Acúmulo total atual
+     * 
+     * @return A quantidade atual de acúmulos. */
+<span class="nc" id="L84">    public int getAcumulos() { return acumulos; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CartaDano.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">CartaDano.java</span></div><h1>CartaDano.java</h1><pre class="source lang-java linenums">/**
+ * Implementação específica de uma {@link Carta} focada em causar dano direto.
+ * Esta classe representa cartas de ataque ofensivo que reduzem os pontos de vida do inimigo.
+ */
+public class CartaDano extends Carta {
+
+    /** A quantidade base de pontos de dano que esta carta inflige. */
+    private int dano;
+
+    /**
+     * Construtor da carta de dano.
+     * Define o nome, custo e calcula automaticamente a descrição com base no dano fornecido.
+     *
+     * @param nome O nome da carta (ex: &quot;Espada&quot;, &quot;Flechada&quot;).
+     * @param custo O custo de energia para usar a carta.
+     * @param dano A quantidade de dano que será causada ao alvo.
+     */
+    public CartaDano(String nome, int custo, int dano) {
+<span class="fc" id="L19">        super(nome, &quot;Causa &quot; + dano + &quot; de dano ao inimigo.&quot;, custo);</span>
+<span class="fc" id="L20">        this.dano = dano;</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * Executa a ação de ataque da carta.
+     * O herói consome a carta para reduzir a vida do inimigo e exibe o status 
+     * atualizado do alvo no console.
+     * @param heroi O herói que está realizando o ataque.
+     * @param inimigo O inimigo que sofrerá o dano.
+     * @param combate O contexto do combate atual.
+     */
+    @Override
+    public void Usar(Heroi heroi, Inimigo inimigo, Combate combate) {
+<span class="nc" id="L33">        System.out.println(heroi.getNome() + &quot; usa &quot; + getNome() + &quot; e causa &quot; + dano + &quot; de dano em &quot; + inimigo.getNome() + &quot;!&quot;);</span>
+<span class="nc" id="L34">        inimigo.ReceberDano(dano);</span>
+<span class="nc" id="L35">        System.out.println(inimigo.getNome() + &quot;: &quot; + inimigo.getVida() + &quot;/&quot; + inimigo.getVidaMaxima() + &quot; de vida.&quot;);</span>
+<span class="nc" id="L36">    }</span>
+    
+    /**
+     * Obtém o valor de dano fixo desta carta.
+     * @return O valor do dano.
+     */
+<span class="nc" id="L42">    public int getDano() { return dano; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

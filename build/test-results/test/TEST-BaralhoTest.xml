@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="BaralhoTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-07-12T22:07:58" hostname="not" time="0.103">
+  <properties/>
+  <testcase name="reciclaPilhaDescarteQuandoCompraEsgota()" classname="BaralhoTest" time="0.058"/>
+  <testcase name="descartarCartaMoveParaDescarte()" classname="BaralhoTest" time="0.004"/>
+  <testcase name="comprarCartasMoveParaMao()" classname="BaralhoTest" time="0.005"/>
+  <testcase name="reiniciarParaNovaBatalhaDevolveTodas()" classname="BaralhoTest" time="0.002"/>
+  <testcase name="descartarMaoLimpaTodasAsCartas()" classname="BaralhoTest" time="0.005"/>
+  <testcase name="comprarMaisCartasQueDisponivel()" classname="BaralhoTest" time="0.004"/>
+  <testcase name="maoVaziaNoInicio()" classname="BaralhoTest" time="0.004"/>
+  <system-out><![CDATA[Pilha de compra esgotada! Embaralhando pilha de descarte...
+Não há mais cartas disponíveis no baralho!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Combate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Combate.java</span></div><h1>Combate.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * Motor principal do jogo que gerencia o fluxo de combate entre o Herói e o Inimigo.
+ * Esta classe atua como um {@link Publisher} no padrão Observer, notificando 
+ * interessados sobre eventos críticos como ataques e encerramento de turnos.
+ */
+public class Combate extends Publisher {
+
+    /** O protagonista controlado pelo jogador. */
+    private Heroi heroi;
+    
+    /** O adversário controlado pela lógica automática. */
+    private Inimigo inimigo;
+    
+    /** O gerenciador de cartas disponível para o herói. */
+    private Baralho baralho;
+    
+    /** Leitor de entrada para capturar as escolhas do jogador. */
+    private Scanner entrada;
+
+    /** Bônus de dano calculado dinamicamente por efeitos (Força, Fraqueza, etc). */
+    private int danoBonus;
+    
+    /** Referência para a entidade que está realizando a ação ofensiva no momento. */
+    private Entidade atacante;
+
+    /**
+     * Inicializa uma nova instância de combate.
+     * @param heroi O herói participante.
+     * @param inimigo O inimigo participante.
+     * @param baralho O baralho configurado para a partida.
+     * @param entrada O scanner para leitura de dados do console.
+     */
+<span class="nc" id="L36">    public Combate(Heroi heroi, Inimigo inimigo, Baralho baralho, Scanner entrada) {</span>
+<span class="nc" id="L37">        this.heroi = heroi;</span>
+<span class="nc" id="L38">        this.inimigo = inimigo;</span>
+<span class="nc" id="L39">        this.baralho = baralho;</span>
+<span class="nc" id="L40">        this.entrada = entrada;</span>
+<span class="nc" id="L41">        this.danoBonus = 0;</span>
+<span class="nc" id="L42">    }</span>
+
+    /**
+     * Notifica os observadores de que um ataque está prestes a ocorrer.
+     * Reinicia o bônus de dano e permite que efeitos inscritos (como Força ou Fraqueza) 
+     * modifiquem o valor final do dano através do método {@link #AddDanoBonus(int)}.
+     * @param atacante A {@link Entidade} que está desferindo o golpe.
+     */
+    public void NotificarAtaque(Entidade atacante) {
+<span class="nc" id="L51">        this.atacante = atacante;</span>
+<span class="nc" id="L52">        this.danoBonus = 0;</span>
+<span class="nc" id="L53">        notificar(&quot;ATAQUE&quot;, this);</span>
+<span class="nc" id="L54">    }</span>
+
+    /** 
+     * Entidade que está atacando
+     * 
+     * @return A entidade que está atacando no momento. */
+<span class="nc" id="L60">    public Entidade getAtacante() { return atacante; }</span>
+
+    /**
+     * Adiciona um valor ao modificador de dano do ataque atual.
+     * @param bonus Valor (positivo ou negativo) a ser somado ao dano base.
+     */
+<span class="nc" id="L66">    public void AddDanoBonus(int bonus) { danoBonus += bonus; }</span>
+
+    /** 
+     * Danos acumulados pelos efeitos
+     * @return O modificador total de dano acumulado pelos efeitos. */
+<span class="nc" id="L71">    public int getDanoBonus() { return danoBonus; }</span>
+
+    /**
+     * Inicia o loop principal da batalha.
+     * O combate continua até que uma das entidades tenha seus pontos de vida zerados.
+     * Gerencia a sequência: Início de Turno -&gt; Turno do Jogador -&gt; Turno do Inimigo.
+     */
+    public void Executar() {
+<span class="nc" id="L79">        int turno = 1;</span>
+
+<span class="nc bnc" id="L81" title="All 4 branches missed.">        while (heroi.EstaVivo() &amp;&amp; inimigo.EstaVivo()) {</span>
+<span class="nc" id="L82">            System.out.println(&quot;=================&quot;);</span>
+<span class="nc" id="L83">            System.out.println(&quot;  TURNO &quot; + turno);</span>
+<span class="nc" id="L84">            System.out.println(&quot;=================&quot;);</span>
+
+            // Início do turno: recupera energia, zera escudo e compra cartas
+<span class="nc" id="L87">            heroi.RecuperarEnergia();</span>
+<span class="nc" id="L88">            heroi.ZerarEscudo();</span>
+<span class="nc" id="L89">            baralho.ComprarCartas(5);</span>
+
+            // Exibe status com efeitos ativos
+<span class="nc" id="L92">            System.out.println(heroi.getNome() + &quot;: &quot; + heroi.getVida() + &quot;/&quot; + heroi.getVidaMaxima()</span>
+<span class="nc" id="L93">                    + &quot; de vida | &quot; + heroi.getEscudo() + &quot; de escudo&quot; + heroi.getEfeitosString());</span>
+<span class="nc" id="L94">            System.out.println(inimigo.getNome() + &quot;: &quot; + inimigo.getVida() + &quot;/&quot; + inimigo.getVidaMaxima()</span>
+<span class="nc" id="L95">                    + &quot; de vida&quot; + inimigo.getEfeitosString());</span>
+<span class="nc" id="L96">            System.out.println(&quot;[!] &quot; + inimigo.AnunciarIntencao());</span>
+<span class="nc" id="L97">            System.out.println(&quot;Compra: &quot; + baralho.getTamanhoCompra()</span>
+<span class="nc" id="L98">                    + &quot; | Descarte: &quot; + baralho.getTamanhoDescarte());</span>
+<span class="nc" id="L99">            System.out.println();</span>
+
+<span class="nc" id="L101">            TurnoJogador();</span>
+
+            // Notifica fim do turno do jogador (efeitos como Veneno reagem aqui)
+<span class="nc" id="L104">            notificar(&quot;FIM_TURNO_JOGADOR&quot;, this);</span>
+<span class="nc" id="L105">            System.out.println();</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (!inimigo.EstaVivo()) break;</span>
+
+<span class="nc" id="L109">            TurnoInimigo();</span>
+
+<span class="nc" id="L111">            System.out.println();</span>
+<span class="nc" id="L112">            turno++;</span>
+        }
+
+        // Resultado final
+<span class="nc" id="L116">        System.out.println(&quot;=================&quot;);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if (!inimigo.EstaVivo()) {</span>
+<span class="nc" id="L118">            System.out.println(&quot;Vitória! &quot; + inimigo.getNome() + &quot; foi derrotado!&quot;);</span>
+        } else {
+<span class="nc" id="L120">            System.out.println(&quot;Derrota! &quot; + heroi.getNome() + &quot; foi derrotado...&quot;);</span>
+        }
+<span class="nc" id="L122">        System.out.println(&quot;=================&quot;);</span>
+<span class="nc" id="L123">    }</span>
+
+    /**
+     * Gerencia a fase de decisão do jogador.
+     * Permite o uso de cartas enquanto houver energia disponível e cartas na mão.
+     */
+    private void TurnoJogador() {
+<span class="nc bnc" id="L130" title="All 6 branches missed.">        while (heroi.getEnergiaAtual() &gt; 0 &amp;&amp; !baralho.MaoVazia() &amp;&amp; inimigo.EstaVivo()) {</span>
+<span class="nc" id="L131">            ArrayList&lt;Carta&gt; mao = baralho.getMao();</span>
+
+<span class="nc" id="L133">            System.out.println(&quot;--- Energia: &quot; + heroi.getEnergiaAtual() + &quot;/&quot; + heroi.getEnergiaMaxima() + &quot; ---&quot;);</span>
+<span class="nc" id="L134">            System.out.println(&quot;Sua mão:&quot;);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            for (int i = 0; i &lt; mao.size(); i++) {</span>
+<span class="nc" id="L136">                System.out.println(&quot;  &quot; + (i + 1) + &quot; - &quot; + mao.get(i).Descricao());</span>
+            }
+<span class="nc" id="L138">            System.out.println(&quot;  0 - Encerrar turno&quot;);</span>
+<span class="nc" id="L139">            System.out.print(&quot;Escolha: &quot;);</span>
+
+<span class="nc" id="L141">            int escolha = entrada.nextInt();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (escolha == 0) break;</span>
+
+<span class="nc bnc" id="L144" title="All 4 branches missed.">            if (escolha &lt; 1 || escolha &gt; mao.size()) {</span>
+<span class="nc" id="L145">                System.out.println(&quot;Opção inválida.&quot;);</span>
+<span class="nc" id="L146">                continue;</span>
+            }
+
+<span class="nc" id="L149">            Carta cartaEscolhida = mao.get(escolha - 1);</span>
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            if (!heroi.GastarEnergia(cartaEscolhida.getCusto())) {</span>
+<span class="nc" id="L152">                System.out.println(&quot;Energia insuficiente para usar &quot; + cartaEscolhida.getNome() + &quot;!&quot;);</span>
+<span class="nc" id="L153">                continue;</span>
+            }
+
+<span class="nc" id="L156">            cartaEscolhida.Usar(heroi, inimigo, this);</span>
+<span class="nc" id="L157">            baralho.DescartarCarta(escolha - 1);</span>
+<span class="nc" id="L158">            System.out.println();</span>
+
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (!inimigo.EstaVivo()) break;</span>
+<span class="nc" id="L161">        }</span>
+
+        // Cartas não jogadas vão para o descarte
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        if (!baralho.MaoVazia()) {</span>
+<span class="nc" id="L165">            System.out.println(&quot;Cartas restantes na mão vão para o descarte.&quot;);</span>
+<span class="nc" id="L166">            baralho.DescartarMao();</span>
+        }
+<span class="nc" id="L168">    }</span>
+
+    /**
+     * Gerencia a fase de ação do inimigo.
+     * Delega ao objeto {@link Inimigo} a execução de sua lógica interna.
+     */ 
+    private void TurnoInimigo() {
+<span class="nc" id="L175">        System.out.println(&quot;--- Vez do &quot; + inimigo.getNome() + &quot; ---&quot;);</span>
+<span class="nc" id="L176">        inimigo.ExecutarAcao(heroi, this);</span>
+<span class="nc" id="L177">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

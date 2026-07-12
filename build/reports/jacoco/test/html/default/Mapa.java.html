@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Mapa.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Mapa.java</span></div><h1>Mapa.java</h1><pre class="source lang-java linenums">/**
+ * Representa o mapa do jogo como uma estrutura em árvore de batalhas.
+ * O jogador navega pelos nós do mapa, escolhendo sempre avançar para nós
+ * não visitados mais profundos, até alcançar um nó final ou ser derrotado.
+ */
+public class Mapa {
+
+    /** O nó raiz da árvore, onde o jogo começa. */
+    private NoMapa raiz;
+
+    /** O nó em que o jogador se encontra atualmente. */
+    private NoMapa atual;
+
+    /**
+     * Construtor do mapa.
+     * @param raiz O nó inicial do jogo.
+     */
+<span class="nc" id="L18">    public Mapa(NoMapa raiz) {</span>
+<span class="nc" id="L19">        this.raiz = raiz;</span>
+<span class="nc" id="L20">        this.atual = raiz;</span>
+<span class="nc" id="L21">    }</span>
+
+    /**
+     * Avança o jogador para o próximo nó escolhido.
+     * @param proximo O nó para o qual o jogador deseja se mover.
+     */
+    public void Avancar(NoMapa proximo) {
+<span class="nc" id="L28">        atual = proximo;</span>
+<span class="nc" id="L29">        atual.setVisitado(true);</span>
+<span class="nc" id="L30">    }</span>
+
+    /**
+     * Verifica se o jogador chegou a um nó final (sem filhos).
+     * @return {@code true} se o nó atual for uma folha da árvore.
+     */
+    public boolean JogoFinalizado() {
+<span class="nc" id="L37">        return atual.isFinal();</span>
+    }
+
+    /** @return O nó raiz do mapa. */
+<span class="nc" id="L41">    public NoMapa getRaiz() { return raiz; }</span>
+
+    /** @return O nó onde o jogador está atualmente. */
+<span class="nc" id="L44">    public NoMapa getAtual() { return atual; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

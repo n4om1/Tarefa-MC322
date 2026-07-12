@@ -154,4 +154,13 @@ public abstract class Entidade {
      * 
      *  @return A lista de todos os efeitos aplicados a esta entidade. */
     public ArrayList<Efeito> getEfeitos() { return efeitos; }
+
+    /**
+     * Remove todos os efeitos ativos da entidade sem interagir com o Publisher.
+     * Deve ser chamado entre batalhas para garantir que o herói inicie cada
+     * combate sem buffs ou debuffs residuais da batalha anterior.
+     */
+    public void LimparEfeitos() {
+        efeitos.clear();
+    }
 }

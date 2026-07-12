@@ -2,23 +2,44 @@
 
 ## Descrição
 
-Jogo de batalha em turnos baseado em *Slay the Spire*. O jogador controla um Herói que enfrenta um inimigo utilizando cartas compradas de um baralho. Esta versão introduz um sistema de **efeitos** implementado com o padrão de design **Observer**.
+Jogo de batalha em turnos baseado em *Slay the Spire*. O jogador controla um Herói que navega por um mapa de batalhas representado como uma árvore, escolhendo seu caminho após cada vitória. A vida e o baralho são mantidos entre batalhas, mas efeitos e energia reiniciam a cada combate.
 
-## Documentação implementada
+## Sistema de mapa
 
-Foi feita uma documentação em todo código de forma bem detalhada sobre o funcionamento do programa com o auxilio de uma LLM.
+O mapa é organizado como uma árvore de nós, onde cada nó representa uma batalha:
 
-## Novas cartas implementadas
+```
+[Rato Gigante] --> [Goblin]     --> [Dragão (final)]
+               --> [Lobisomem] --> [Lich (final)]
+```
 
-**Bola de fogo** (Custo 2): aplica 8 de dano ao inimigo.
+Após cada vitória, o jogador escolhe qual caminho seguir. O jogo termina em vitória ao derrotar um inimigo em um nó final, ou em derrota se o herói morrer.
 
-**Espinho** (Custo 2): aplica 8 de Dano ao inimigo.
+## Efeitos implementados
 
-**Parede de terra** (Custo 1): aplica 10 de Defesa ao herói.
+**Veneno:** ao final do turno do jogador, a entidade afligida sofre X de dano e perde 1 acúmulo. Quando os acúmulos chegam a zero, o efeito se dissipa.
 
-**Parede de ferro** (Custo 2): aplica 15 de Defesa ao herói.
+**Força:** quando a entidade afligida realiza um ataque, causa X de dano adicional. É aplicado pelo inimigo em si mesmo.
 
-**Golpe atordoante** (Custo 1): aplica 2 acumulo de Fraqueza ao inimigo, reduzindo seu ataque.
+**Fraqueza:** quando a entidade afligida realiza um ataque, causa X de dano a menos. É aplicada pelo jogador via carta.
+
+## Cartas que aplicam efeitos
+
+**Frasco de Veneno** (Custo 1): aplica 3 acúmulos de Veneno ao inimigo.
+
+**Golpe Enfraquecedor** (Custo 1): aplica 2 acúmulos de Fraqueza ao inimigo, reduzindo seu ataque.
+
+**Golpe Atordoante** (Custo 1): aplica 2 acúmulos de Fraqueza ao inimigo, reduzindo seu ataque.
+
+## Testes automatizados
+
+Os testes estão em `src/test/java/` e cobrem as classes `Heroi`, `Baralho` e `NoMapa`. Para executar e gerar o relatório de cobertura:
+
+```bash
+./gradlew test
+```
+
+O relatório de cobertura é gerado em `build/reports/jacoco/test/html/index.html`.
 
 ## Como compilar
 

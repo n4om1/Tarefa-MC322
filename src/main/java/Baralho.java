@@ -106,4 +106,16 @@ public class Baralho {
      * @return {@code true} se a mão estiver vazia; {@code false} caso contrário.
      */
     public boolean MaoVazia() { return maoJogador.isEmpty(); }
+
+    /**
+     * Devolve todas as cartas (mão e descarte) à pilha de compra e embaralha.
+     * Chamado entre batalhas para reiniciar o baralho mantendo todas as cartas do deck.
+     */
+    public void ReiniciarParaNovaBatalha() {
+        pilhaCompra.addAll(maoJogador);
+        pilhaCompra.addAll(pilhaDescarte);
+        maoJogador.clear();
+        pilhaDescarte.clear();
+        Collections.shuffle(pilhaCompra);
+    }
 }

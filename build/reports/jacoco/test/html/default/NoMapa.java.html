@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NoMapa.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">NoMapa.java</span></div><h1>NoMapa.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+
+/**
+ * Representa um nó na estrutura de árvore do mapa do jogo.
+ * Cada nó contém uma batalha a ser disputada e referências para os próximos
+ * nós disponíveis ao jogador após a vitória.
+ */
+public class NoMapa {
+
+    /** A batalha associada a este nó do mapa. */
+    private Batalha batalha;
+
+    /** Lista de nós filhos (próximas batalhas disponíveis ao avançar). */
+    private ArrayList&lt;NoMapa&gt; filhos;
+
+    /** Indica se o jogador já visitou este nó. */
+    private boolean visitado;
+
+    /**
+     * Construtor do nó do mapa.
+     * @param batalha A batalha que ocorrerá neste nó.
+     */
+<span class="fc" id="L23">    public NoMapa(Batalha batalha) {</span>
+<span class="fc" id="L24">        this.batalha = batalha;</span>
+<span class="fc" id="L25">        this.filhos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L26">        this.visitado = false;</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Adiciona um nó filho (próximo possível destino após vencer este nó).
+     * @param filho O nó a ser adicionado como próximo destino.
+     */
+    public void AdicionarFilho(NoMapa filho) {
+<span class="fc" id="L34">        filhos.add(filho);</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Verifica se este é um nó final (sem filhos), indicando o fim do mapa.
+     * @return {@code true} se não houver nós filhos; {@code false} caso contrário.
+     */
+    public boolean isFinal() {
+<span class="fc" id="L42">        return filhos.isEmpty();</span>
+    }
+
+    /** @return A batalha deste nó. */
+<span class="nc" id="L46">    public Batalha getBatalha() { return batalha; }</span>
+
+    /** @return A lista de nós filhos disponíveis. */
+<span class="fc" id="L49">    public ArrayList&lt;NoMapa&gt; getFilhos() { return filhos; }</span>
+
+    /** @return Se o nó foi visitado. */
+<span class="fc" id="L52">    public boolean isVisitado() { return visitado; }</span>
+
+    /**
+     * Marca este nó como visitado.
+     * @param visitado O novo estado de visita.
+     */
+<span class="fc" id="L58">    public void setVisitado(boolean visitado) { this.visitado = visitado; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
