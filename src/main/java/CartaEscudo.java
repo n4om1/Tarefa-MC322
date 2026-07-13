@@ -41,4 +41,16 @@ public class CartaEscudo extends Carta {
      * @return O valor do escudo.
      */
     public int getProtecao() { return protecao; }
+
+    /** @return Descrição atualizada com o valor de proteção atual. */
+    @Override
+    public String getDescricao() {
+        return "Concede " + protecao + " de escudo ao herói." + (isMelhorada() ? " [+]" : "");
+    }
+
+    /** Aumenta a proteção em 3 ao ser melhorada na fogueira. */
+    @Override
+    protected void AplicarMelhoria() {
+        protecao += 3;
+    }
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="NoMapaTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-12T22:07:58" hostname="not" time="0.024">
+<testsuite name="NoMapaTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-13T03:10:12" hostname="not" time="0.039">
   <properties/>
-  <testcase name="noSemFilhosEhFinal()" classname="NoMapaTest" time="0.006"/>
-  <testcase name="visitadoIniciaFalso()" classname="NoMapaTest" time="0.002"/>
+  <testcase name="noSemFilhosEhFinal()" classname="NoMapaTest" time="0.011"/>
+  <testcase name="visitadoIniciaFalso()" classname="NoMapaTest" time="0.007"/>
   <testcase name="noComFilhosNaoEhFinal()" classname="NoMapaTest" time="0.002"/>
-  <testcase name="setVisitadoAlteraEstado()" classname="NoMapaTest" time="0.002"/>
-  <testcase name="adicionarFilhoAumentaLista()" classname="NoMapaTest" time="0.003"/>
+  <testcase name="setVisitadoAlteraEstado()" classname="NoMapaTest" time="0.008"/>
+  <testcase name="adicionarFilhoAumentaLista()" classname="NoMapaTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -14,6 +14,9 @@ public abstract class Carta {
     /** O custo de energia necessário para utilizar a carta. */
     private int custo;
 
+    /** Indica se esta carta já foi melhorada na fogueira. */
+    private boolean melhorada = false;
+
     /**
      * Construtor base para as cartas.
      *
@@ -64,4 +67,28 @@ public abstract class Carta {
     public String Descricao() {
         return nome + " [Custo: " + custo + "] - " + descricao;
     }
+
+    /**
+     * Melhora a carta aumentando seus atributos base.
+     * Cada subclasse define o que melhora em {@link #AplicarMelhoria()}.
+     * Só pode ser executado uma vez por carta.
+     */
+    public void Melhorar() {
+        if (melhorada) {
+            System.out.println(getNome() + " já foi melhorada!");
+            return;
+        }
+        melhorada = true;
+        AplicarMelhoria();
+        System.out.println(getNome() + " foi melhorada! Agora: " + Descricao());
+    }
+
+    /**
+     * Define o que muda ao melhorar esta carta. Subclasses devem sobrescrever.
+     * Implementação padrão não faz nada.
+     */
+    protected void AplicarMelhoria() {}
+
+    /** @return true se esta carta já foi melhorada. */
+    public boolean isMelhorada() { return melhorada; }
 }

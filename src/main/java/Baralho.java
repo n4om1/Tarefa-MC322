@@ -118,4 +118,29 @@ public class Baralho {
         pilhaDescarte.clear();
         Collections.shuffle(pilhaCompra);
     }
+
+    /**
+     * Retorna todas as cartas do baralho (compra + mão + descarte).
+     * Útil para exibir o baralho completo fora do combate.
+     * @return Lista com todas as cartas.
+     */
+    public ArrayList<Carta> getTodas() {
+        ArrayList<Carta> todas = new ArrayList<>();
+        todas.addAll(pilhaCompra);
+        todas.addAll(maoJogador);
+        todas.addAll(pilhaDescarte);
+        return todas;
+    }
+
+    /**
+     * Remove uma carta específica do baralho (busca em todas as pilhas).
+     * @param carta A carta a ser removida.
+     */
+    public void RemoverCarta(Carta carta) {
+        if (!pilhaCompra.remove(carta)) {
+            if (!maoJogador.remove(carta)) {
+                pilhaDescarte.remove(carta);
+            }
+        }
+    }
 }

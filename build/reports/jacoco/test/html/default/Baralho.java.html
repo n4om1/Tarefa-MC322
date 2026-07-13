@@ -118,5 +118,30 @@ public class Baralho {
 <span class="fc" id="L118">        pilhaDescarte.clear();</span>
 <span class="fc" id="L119">        Collections.shuffle(pilhaCompra);</span>
 <span class="fc" id="L120">    }</span>
+
+    /**
+     * Retorna todas as cartas do baralho (compra + mão + descarte).
+     * Útil para exibir o baralho completo fora do combate.
+     * @return Lista com todas as cartas.
+     */
+    public ArrayList&lt;Carta&gt; getTodas() {
+<span class="nc" id="L128">        ArrayList&lt;Carta&gt; todas = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L129">        todas.addAll(pilhaCompra);</span>
+<span class="nc" id="L130">        todas.addAll(maoJogador);</span>
+<span class="nc" id="L131">        todas.addAll(pilhaDescarte);</span>
+<span class="nc" id="L132">        return todas;</span>
+    }
+
+    /**
+     * Remove uma carta específica do baralho (busca em todas as pilhas).
+     * @param carta A carta a ser removida.
+     */
+    public void RemoverCarta(Carta carta) {
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        if (!pilhaCompra.remove(carta)) {</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            if (!maoJogador.remove(carta)) {</span>
+<span class="nc" id="L142">                pilhaDescarte.remove(carta);</span>
+            }
+        }
+<span class="nc" id="L145">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

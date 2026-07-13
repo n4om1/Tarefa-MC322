@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="HeroiTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-07-12T22:07:58" hostname="not" time="0.06">
+<testsuite name="HeroiTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-07-13T03:10:12" hostname="not" time="0.059">
   <properties/>
-  <testcase name="zerarEscudoReseta()" classname="HeroiTest" time="0.011"/>
-  <testcase name="gastarEnergiaComSucesso()" classname="HeroiTest" time="0.004"/>
-  <testcase name="gastarEnergiaSemSaldo()" classname="HeroiTest" time="0.001"/>
-  <testcase name="danoParcialComEscudo()" classname="HeroiTest" time="0.002"/>
-  <testcase name="vidaNaoFicaNegativa()" classname="HeroiTest" time="0.003"/>
+  <testcase name="zerarEscudoReseta()" classname="HeroiTest" time="0.007"/>
+  <testcase name="gastarEnergiaComSucesso()" classname="HeroiTest" time="0.001"/>
+  <testcase name="gastarEnergiaSemSaldo()" classname="HeroiTest" time="0.002"/>
+  <testcase name="danoParcialComEscudo()" classname="HeroiTest" time="0.001"/>
+  <testcase name="vidaNaoFicaNegativa()" classname="HeroiTest" time="0.002"/>
   <testcase name="danoAbsorvidoTotalmentePoEscudo()" classname="HeroiTest" time="0.003"/>
   <testcase name="danoSemEscudo()" classname="HeroiTest" time="0.006"/>
-  <testcase name="estaVivoComVida()" classname="HeroiTest" time="0.002"/>
-  <testcase name="recuperarEnergiaRestaurarMaximo()" classname="HeroiTest" time="0.003"/>
-  <testcase name="naoEstaVivoComVidaZero()" classname="HeroiTest" time="0.001"/>
-  <testcase name="limparEfeitosRemoveTodos()" classname="HeroiTest" time="0.002"/>
+  <testcase name="estaVivoComVida()" classname="HeroiTest" time="0.003"/>
+  <testcase name="recuperarEnergiaRestaurarMaximo()" classname="HeroiTest" time="0.002"/>
+  <testcase name="naoEstaVivoComVidaZero()" classname="HeroiTest" time="0.003"/>
+  <testcase name="limparEfeitosRemoveTodos()" classname="HeroiTest" time="0.004"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

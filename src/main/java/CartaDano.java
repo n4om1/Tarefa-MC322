@@ -40,4 +40,16 @@ public class CartaDano extends Carta {
      * @return O valor do dano.
      */
     public int getDano() { return dano; }
+
+    /** @return Descrição atualizada com o valor de dano atual. */
+    @Override
+    public String getDescricao() {
+        return "Causa " + dano + " de dano ao inimigo." + (isMelhorada() ? " [+]" : "");
+    }
+
+    /** Aumenta o dano em 3 ao ser melhorada na fogueira. */
+    @Override
+    protected void AplicarMelhoria() {
+        dano += 3;
+    }
 }

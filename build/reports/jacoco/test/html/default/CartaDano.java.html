@@ -40,5 +40,17 @@ public class CartaDano extends Carta {
      * @return O valor do dano.
      */
 <span class="nc" id="L42">    public int getDano() { return dano; }</span>
+
+    /** @return Descrição atualizada com o valor de dano atual. */
+    @Override
+    public String getDescricao() {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        return &quot;Causa &quot; + dano + &quot; de dano ao inimigo.&quot; + (isMelhorada() ? &quot; [+]&quot; : &quot;&quot;);</span>
+    }
+
+    /** Aumenta o dano em 3 ao ser melhorada na fogueira. */
+    @Override
+    protected void AplicarMelhoria() {
+<span class="nc" id="L53">        dano += 3;</span>
+<span class="nc" id="L54">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

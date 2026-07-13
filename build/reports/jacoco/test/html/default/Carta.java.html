@@ -14,6 +14,9 @@ public abstract class Carta {
     /** O custo de energia necessário para utilizar a carta. */
     private int custo;
 
+    /** Indica se esta carta já foi melhorada na fogueira. */
+<span class="fc" id="L18">    private boolean melhorada = false;</span>
+
     /**
      * Construtor base para as cartas.
      *
@@ -21,11 +24,11 @@ public abstract class Carta {
      * @param descricao Texto explicativo do efeito.
      * @param custo Valor em energia a ser subtraído do herói.
      */
-<span class="fc" id="L24">    public Carta(String nome, String descricao, int custo) {</span>
-<span class="fc" id="L25">        this.nome = nome;</span>
-<span class="fc" id="L26">        this.descricao = descricao;</span>
-<span class="fc" id="L27">        this.custo = custo;</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L27">    public Carta(String nome, String descricao, int custo) {</span>
+<span class="fc" id="L28">        this.nome = nome;</span>
+<span class="fc" id="L29">        this.descricao = descricao;</span>
+<span class="fc" id="L30">        this.custo = custo;</span>
+<span class="fc" id="L31">    }</span>
 
     /**
      * Método abstrato que define a ação executada quando a carta é jogada.
@@ -42,19 +45,19 @@ public abstract class Carta {
      * Obtém o nome da carta.
      * @return O nome da carta.
      */
-<span class="nc" id="L45">    public String getNome() { return nome; }</span>
+<span class="nc" id="L48">    public String getNome() { return nome; }</span>
 
     /**
      * Obtém a descrição do tipo ou efeito da carta.
      * @return A descrição da carta.
      */
-<span class="nc" id="L51">    public String getDescricao() { return descricao; }</span>
+<span class="nc" id="L54">    public String getDescricao() { return descricao; }</span>
 
     /**
      * Obtém o custo de energia da carta.
      * @return O valor do custo.
      */
-<span class="nc" id="L57">    public int getCusto() { return custo; }</span>
+<span class="nc" id="L60">    public int getCusto() { return custo; }</span>
 
     /**
      * Fornece uma representação textual formatada da carta, útil para interfaces de console.
@@ -62,7 +65,31 @@ public abstract class Carta {
      * @return Uma String contendo o nome, custo e descrição detalhada.
      */
     public String Descricao() {
-<span class="nc" id="L65">        return nome + &quot; [Custo: &quot; + custo + &quot;] - &quot; + descricao;</span>
+<span class="nc" id="L68">        return nome + &quot; [Custo: &quot; + custo + &quot;] - &quot; + descricao;</span>
     }
+
+    /**
+     * Melhora a carta aumentando seus atributos base.
+     * Cada subclasse define o que melhora em {@link #AplicarMelhoria()}.
+     * Só pode ser executado uma vez por carta.
+     */
+    public void Melhorar() {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (melhorada) {</span>
+<span class="nc" id="L78">            System.out.println(getNome() + &quot; já foi melhorada!&quot;);</span>
+<span class="nc" id="L79">            return;</span>
+        }
+<span class="nc" id="L81">        melhorada = true;</span>
+<span class="nc" id="L82">        AplicarMelhoria();</span>
+<span class="nc" id="L83">        System.out.println(getNome() + &quot; foi melhorada! Agora: &quot; + Descricao());</span>
+<span class="nc" id="L84">    }</span>
+
+    /**
+     * Define o que muda ao melhorar esta carta. Subclasses devem sobrescrever.
+     * Implementação padrão não faz nada.
+     */
+<span class="nc" id="L90">    protected void AplicarMelhoria() {}</span>
+
+    /** @return true se esta carta já foi melhorada. */
+<span class="nc" id="L93">    public boolean isMelhorada() { return melhorada; }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

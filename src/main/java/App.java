@@ -2,101 +2,103 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Classe principal que serve como ponto de entrada para a aplicação.
- * Configura o mapa de batalhas e gerencia a progressão do jogador
- * pela campanha, mantendo o estado entre combates.
+ * Classe principal. Configura o estado inicial do jogador, monta o mapa e
+ * executa o loop de progressão entre eventos.
+ *
+ * <p>Mapa gerado:
+ * <pre>
+ *  [Rato Gigante] --> [Altar Misterioso] --> [Goblin Feroz] --> [Dragão] (final)
+ *                --> [Loja]             --> [Fogueira]     --> [Lich]    (final)
+ * </pre>
+ * </p>
  */
 public class App {
 
-    /** Construtor privado — classe utilitária, não deve ser instanciada. */
     private App() {}
 
-    /**
-     * Método principal que inicializa o herói, o baralho e o mapa do jogo,
-     * e então executa o loop de progressão entre batalhas.
-     *
-     * @param args Argumentos de linha de comando (não utilizados).
-     */
     public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
 
-        // Instancia o herói — vida e baralho são mantidos entre batalhas
+        // Estado persistente do jogador (vida + baralho + ouro)
         Heroi heroi = new Heroi("Herói", 40, 3);
+        Baralho baralho = MontarBaralho();
+        EstadoJogador estado = new EstadoJogador(heroi, baralho, 0, entrada);
 
-        // Monta o baralho inicial
-        Baralho baralho = new Baralho();
-        baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
-        baralho.AdicionarCarta(new CartaDano("Espada", 1, 6));
-        baralho.AdicionarCarta(new CartaDano("Bola de fogo", 2, 8));
-        baralho.AdicionarCarta(new CartaDano("Espinho", 2, 8));
-        baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12));
-        baralho.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
-        baralho.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
-        baralho.AdicionarCarta(new CartaEscudo("Barreira", 2, 10));
-        baralho.AdicionarCarta(new CartaEscudo("Parede de terra", 1, 10));
-        baralho.AdicionarCarta(new CartaEscudo("Parede de ferro", 2, 15));
-        baralho.AdicionarCarta(new CartaVeneno("Frasco de Veneno", 1, 3));
-        baralho.AdicionarCarta(new CartaVeneno("Frasco de Veneno", 1, 3));
-        baralho.AdicionarCarta(new CartaFraqueza("Golpe Enfraquecedor", 1, 2));
-        baralho.AdicionarCarta(new CartaFraqueza("Golpe Atordoante", 1, 2));
-        baralho.AdicionarCarta(new CartaDano("Flechada", 2, 12));
+        // Escolha narrativa: Altar Misterioso
+        Escolha altar = new Escolha(
+            "Altar Misterioso",
+            "Você encontra um altar coberto de runas. Uma voz ecoa: 'Escolha com sabedoria...'"
+        );
+        altar.AdicionarOpcao(new OpcaoEscolha(
+            "Oferecer sangue (-8 HP, +40 ouro)",
+            e -> {
+                e.getHeroi().ReceberDano(8);
+                e.AdicionarOuro(40);
+                System.out.println("Você se corta e sangra no altar. Moedas surgem do nada...");
+                System.out.println("HP: " + e.getHeroi().getVida() + "/" + e.getHeroi().getVidaMaxima());
+            }
+        ));
+        altar.AdicionarOpcao(new OpcaoEscolha(
+            "Tocar a runa central (receber uma carta aleatória)",
+            e -> {
+                Carta carta = PoolCartas.CartaAleatoria();
+                e.getBaralho().AdicionarCarta(carta);
+                System.out.println("A runa brilha e uma carta materializa em suas mãos: " + carta.getNome() + "!");
+            }
+        ));
+        altar.AdicionarOpcao(new OpcaoEscolha(
+            "Seguir em frente (nada acontece)",
+            e -> System.out.println("Você passa pelo altar sem olhar para trás.")
+        ));
 
-        // Monta o mapa como uma árvore de batalhas
-        //
-        //  [Rato] --> [Goblin] --> [Dragão (final)]
-        //         --> [Lobisomem] --> [Lich (final)]
-        //
-        NoMapa no0 = new NoMapa(new Batalha(new Inimigo("Rato Gigante", 25, 5)));
-        NoMapa no1 = new NoMapa(new Batalha(new Inimigo("Goblin", 35, 8)));
-        NoMapa no2 = new NoMapa(new Batalha(new Inimigo("Lobisomem", 40, 10)));
-        NoMapa no3 = new NoMapa(new Batalha(new Inimigo("Dragão", 60, 14)));
-        NoMapa no4 = new NoMapa(new Batalha(new Inimigo("Lich", 55, 12)));
+        // Monta a árvore do mapa
+        NoMapa n0  = new NoMapa(new Batalha(new Inimigo("Rato Gigante", 25, 5)));
+        NoMapa n1a = new NoMapa(altar);
+        NoMapa n1b = new NoMapa(new EventoLoja());
+        NoMapa n2a = new NoMapa(new Batalha(new Inimigo("Goblin Feroz", 40, 9)));
+        NoMapa n2b = new NoMapa(new EventoFogueira());
+        NoMapa n3a = new NoMapa(new Batalha(new Inimigo("Dragão", 60, 14)));   // final
+        NoMapa n3b = new NoMapa(new Batalha(new Inimigo("Lich das Sombras", 55, 12))); // final
 
-        no0.AdicionarFilho(no1);
-        no0.AdicionarFilho(no2);
-        no1.AdicionarFilho(no3);
-        no2.AdicionarFilho(no4);
+        n0.AdicionarFilho(n1a);  n0.AdicionarFilho(n1b);
+        n1a.AdicionarFilho(n2a); n1b.AdicionarFilho(n2b);
+        n2a.AdicionarFilho(n3a); n2b.AdicionarFilho(n3b);
 
-        Mapa mapa = new Mapa(no0);
+        Mapa mapa = new Mapa(n0);
         NoMapa atual = mapa.getRaiz();
         atual.setVisitado(true);
 
         System.out.println("=== BEM-VINDO AO RPG GAME ===");
-        System.out.println("Sua missão: atravessar o mapa e derrotar o chefe final!");
+        System.out.println("Traversse o mapa e derrote o chefe final!");
         System.out.println();
 
         // Loop principal de progressão
         while (true) {
-            // Executa a batalha do nó atual
-            boolean vitoria = atual.getBatalha().Executar(heroi, baralho, entrada);
+            atual.getEvento().Iniciar(estado);
 
-            if (!vitoria) {
+            if (!heroi.EstaVivo()) {
                 System.out.println(">>> GAME OVER! " + heroi.getNome() + " foi derrotado. <<<");
                 break;
             }
 
-            // Vitória em nó final = fim do jogo
             if (atual.isFinal()) {
-                System.out.println(">>> VOCÊ VENCEU O JOGO! Parabéns! <<<");
+                System.out.println(">>> VOCÊ VENCEU! Parabéns! <<<");
                 break;
             }
 
-            // Exibe status do herói entre batalhas
-            System.out.println();
-            System.out.println("--- Status do herói: " + heroi.getVida() + "/" + heroi.getVidaMaxima() + " HP ---");
-
-            // Mostra opções de próxima batalha
+            // Exibe status e deixa jogador escolher próximo nó
             ArrayList<NoMapa> filhos = atual.getFilhos();
+            System.out.println("--- " + heroi.getNome() + ": " + heroi.getVida() + "/"
+                    + heroi.getVidaMaxima() + " HP | " + estado.getOuro() + " ouro ---");
             System.out.println("Escolha o próximo destino:");
             for (int i = 0; i < filhos.size(); i++) {
-                Inimigo prox = filhos.get(i).getBatalha().getInimigo();
-                System.out.println("  " + (i + 1) + " - " + prox.getNome() + " (" + prox.getVida() + " HP)");
+                System.out.println("  " + (i + 1) + " - " + filhos.get(i).getEvento().getNome());
             }
             System.out.print("Escolha: ");
 
             int escolha = entrada.nextInt();
             while (escolha < 1 || escolha > filhos.size()) {
-                System.out.print("Opção inválida. Escolha novamente: ");
+                System.out.print("Opção inválida: ");
                 escolha = entrada.nextInt();
             }
 
@@ -106,5 +108,26 @@ public class App {
         }
 
         entrada.close();
+    }
+
+    /** Monta o baralho inicial do jogador. */
+    private static Baralho MontarBaralho() {
+        Baralho b = new Baralho();
+        b.AdicionarCarta(new CartaDano("Espada", 1, 6));
+        b.AdicionarCarta(new CartaDano("Espada", 1, 6));
+        b.AdicionarCarta(new CartaDano("Bola de fogo", 2, 8));
+        b.AdicionarCarta(new CartaDano("Espinho", 2, 8));
+        b.AdicionarCarta(new CartaDano("Flechada", 2, 12));
+        b.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
+        b.AdicionarCarta(new CartaEscudo("Escudo", 1, 5));
+        b.AdicionarCarta(new CartaEscudo("Barreira", 2, 10));
+        b.AdicionarCarta(new CartaEscudo("Parede de terra", 1, 10));
+        b.AdicionarCarta(new CartaEscudo("Parede de ferro", 2, 15));
+        b.AdicionarCarta(new CartaVeneno("Frasco de Veneno", 1, 3));
+        b.AdicionarCarta(new CartaVeneno("Frasco de Veneno", 1, 3));
+        b.AdicionarCarta(new CartaFraqueza("Golpe Enfraquecedor", 1, 2));
+        b.AdicionarCarta(new CartaFraqueza("Golpe Atordoante", 1, 2));
+        b.AdicionarCarta(new CartaDano("Flechada", 2, 12));
+        return b;
     }
 }

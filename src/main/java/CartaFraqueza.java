@@ -35,4 +35,16 @@ public class CartaFraqueza extends Carta {
         System.out.println(heroi.getNome() + " usa " + getNome() + " e aplica " + acumulos + " de Fraqueza em " + inimigo.getNome() + "!");
         inimigo.AplicarEfeito(new EfeitoFraqueza(inimigo, acumulos), combate);
     }
+
+    /** @return Descrição atualizada com os acúmulos atuais. */
+    @Override
+    public String getDescricao() {
+        return "Aplica " + acumulos + " de Fraqueza ao inimigo, reduzindo seu ataque." + (isMelhorada() ? " [+]" : "");
+    }
+
+    /** Aumenta os acúmulos de fraqueza em 1 ao ser melhorada na fogueira. */
+    @Override
+    protected void AplicarMelhoria() {
+        acumulos += 1;
+    }
 }

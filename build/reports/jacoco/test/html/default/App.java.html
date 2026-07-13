@@ -2,110 +2,133 @@
 import java.util.Scanner;
 
 /**
- * Classe principal que serve como ponto de entrada para a aplicação.
- * Configura o mapa de batalhas e gerencia a progressão do jogador
- * pela campanha, mantendo o estado entre combates.
+ * Classe principal. Configura o estado inicial do jogador, monta o mapa e
+ * executa o loop de progressão entre eventos.
+ *
+ * &lt;p&gt;Mapa gerado:
+ * &lt;pre&gt;
+ *  [Rato Gigante] --&gt; [Altar Misterioso] --&gt; [Goblin Feroz] --&gt; [Dragão] (final)
+ *                --&gt; [Loja]             --&gt; [Fogueira]     --&gt; [Lich]    (final)
+ * &lt;/pre&gt;
+ * &lt;/p&gt;
  */
 public class App {
 
-    /** Construtor privado — classe utilitária, não deve ser instanciada. */
     private App() {}
 
-    /**
-     * Método principal que inicializa o herói, o baralho e o mapa do jogo,
-     * e então executa o loop de progressão entre batalhas.
-     *
-     * @param args Argumentos de linha de comando (não utilizados).
-     */
     public static void main(String[] args) {
-<span class="nc" id="L21">        Scanner entrada = new Scanner(System.in);</span>
+<span class="nc" id="L20">        Scanner entrada = new Scanner(System.in);</span>
 
-        // Instancia o herói — vida e baralho são mantidos entre batalhas
-<span class="nc" id="L24">        Heroi heroi = new Heroi(&quot;Herói&quot;, 40, 3);</span>
+        // Estado persistente do jogador (vida + baralho + ouro)
+<span class="nc" id="L23">        Heroi heroi = new Heroi(&quot;Herói&quot;, 40, 3);</span>
+<span class="nc" id="L24">        Baralho baralho = MontarBaralho();</span>
+<span class="nc" id="L25">        EstadoJogador estado = new EstadoJogador(heroi, baralho, 0, entrada);</span>
 
-        // Monta o baralho inicial
-<span class="nc" id="L27">        Baralho baralho = new Baralho();</span>
-<span class="nc" id="L28">        baralho.AdicionarCarta(new CartaDano(&quot;Espada&quot;, 1, 6));</span>
-<span class="nc" id="L29">        baralho.AdicionarCarta(new CartaDano(&quot;Espada&quot;, 1, 6));</span>
-<span class="nc" id="L30">        baralho.AdicionarCarta(new CartaDano(&quot;Bola de fogo&quot;, 2, 8));</span>
-<span class="nc" id="L31">        baralho.AdicionarCarta(new CartaDano(&quot;Espinho&quot;, 2, 8));</span>
-<span class="nc" id="L32">        baralho.AdicionarCarta(new CartaDano(&quot;Flechada&quot;, 2, 12));</span>
-<span class="nc" id="L33">        baralho.AdicionarCarta(new CartaEscudo(&quot;Escudo&quot;, 1, 5));</span>
-<span class="nc" id="L34">        baralho.AdicionarCarta(new CartaEscudo(&quot;Escudo&quot;, 1, 5));</span>
-<span class="nc" id="L35">        baralho.AdicionarCarta(new CartaEscudo(&quot;Barreira&quot;, 2, 10));</span>
-<span class="nc" id="L36">        baralho.AdicionarCarta(new CartaEscudo(&quot;Parede de terra&quot;, 1, 10));</span>
-<span class="nc" id="L37">        baralho.AdicionarCarta(new CartaEscudo(&quot;Parede de ferro&quot;, 2, 15));</span>
-<span class="nc" id="L38">        baralho.AdicionarCarta(new CartaVeneno(&quot;Frasco de Veneno&quot;, 1, 3));</span>
-<span class="nc" id="L39">        baralho.AdicionarCarta(new CartaVeneno(&quot;Frasco de Veneno&quot;, 1, 3));</span>
-<span class="nc" id="L40">        baralho.AdicionarCarta(new CartaFraqueza(&quot;Golpe Enfraquecedor&quot;, 1, 2));</span>
-<span class="nc" id="L41">        baralho.AdicionarCarta(new CartaFraqueza(&quot;Golpe Atordoante&quot;, 1, 2));</span>
-<span class="nc" id="L42">        baralho.AdicionarCarta(new CartaDano(&quot;Flechada&quot;, 2, 12));</span>
+        // Escolha narrativa: Altar Misterioso
+<span class="nc" id="L28">        Escolha altar = new Escolha(</span>
+            &quot;Altar Misterioso&quot;,
+            &quot;Você encontra um altar coberto de runas. Uma voz ecoa: 'Escolha com sabedoria...'&quot;
+        );
+<span class="nc" id="L32">        altar.AdicionarOpcao(new OpcaoEscolha(</span>
+            &quot;Oferecer sangue (-8 HP, +40 ouro)&quot;,
+            e -&gt; {
+<span class="nc" id="L35">                e.getHeroi().ReceberDano(8);</span>
+<span class="nc" id="L36">                e.AdicionarOuro(40);</span>
+<span class="nc" id="L37">                System.out.println(&quot;Você se corta e sangra no altar. Moedas surgem do nada...&quot;);</span>
+<span class="nc" id="L38">                System.out.println(&quot;HP: &quot; + e.getHeroi().getVida() + &quot;/&quot; + e.getHeroi().getVidaMaxima());</span>
+<span class="nc" id="L39">            }</span>
+        ));
+<span class="nc" id="L41">        altar.AdicionarOpcao(new OpcaoEscolha(</span>
+            &quot;Tocar a runa central (receber uma carta aleatória)&quot;,
+            e -&gt; {
+<span class="nc" id="L44">                Carta carta = PoolCartas.CartaAleatoria();</span>
+<span class="nc" id="L45">                e.getBaralho().AdicionarCarta(carta);</span>
+<span class="nc" id="L46">                System.out.println(&quot;A runa brilha e uma carta materializa em suas mãos: &quot; + carta.getNome() + &quot;!&quot;);</span>
+<span class="nc" id="L47">            }</span>
+        ));
+<span class="nc" id="L49">        altar.AdicionarOpcao(new OpcaoEscolha(</span>
+            &quot;Seguir em frente (nada acontece)&quot;,
+<span class="nc" id="L51">            e -&gt; System.out.println(&quot;Você passa pelo altar sem olhar para trás.&quot;)</span>
+        ));
 
-        // Monta o mapa como uma árvore de batalhas
-        //
-        //  [Rato] --&gt; [Goblin] --&gt; [Dragão (final)]
-        //         --&gt; [Lobisomem] --&gt; [Lich (final)]
-        //
-<span class="nc" id="L49">        NoMapa no0 = new NoMapa(new Batalha(new Inimigo(&quot;Rato Gigante&quot;, 25, 5)));</span>
-<span class="nc" id="L50">        NoMapa no1 = new NoMapa(new Batalha(new Inimigo(&quot;Goblin&quot;, 35, 8)));</span>
-<span class="nc" id="L51">        NoMapa no2 = new NoMapa(new Batalha(new Inimigo(&quot;Lobisomem&quot;, 40, 10)));</span>
-<span class="nc" id="L52">        NoMapa no3 = new NoMapa(new Batalha(new Inimigo(&quot;Dragão&quot;, 60, 14)));</span>
-<span class="nc" id="L53">        NoMapa no4 = new NoMapa(new Batalha(new Inimigo(&quot;Lich&quot;, 55, 12)));</span>
+        // Monta a árvore do mapa
+<span class="nc" id="L55">        NoMapa n0  = new NoMapa(new Batalha(new Inimigo(&quot;Rato Gigante&quot;, 25, 5)));</span>
+<span class="nc" id="L56">        NoMapa n1a = new NoMapa(altar);</span>
+<span class="nc" id="L57">        NoMapa n1b = new NoMapa(new EventoLoja());</span>
+<span class="nc" id="L58">        NoMapa n2a = new NoMapa(new Batalha(new Inimigo(&quot;Goblin Feroz&quot;, 40, 9)));</span>
+<span class="nc" id="L59">        NoMapa n2b = new NoMapa(new EventoFogueira());</span>
+<span class="nc" id="L60">        NoMapa n3a = new NoMapa(new Batalha(new Inimigo(&quot;Dragão&quot;, 60, 14)));   // final</span>
+<span class="nc" id="L61">        NoMapa n3b = new NoMapa(new Batalha(new Inimigo(&quot;Lich das Sombras&quot;, 55, 12))); // final</span>
 
-<span class="nc" id="L55">        no0.AdicionarFilho(no1);</span>
-<span class="nc" id="L56">        no0.AdicionarFilho(no2);</span>
-<span class="nc" id="L57">        no1.AdicionarFilho(no3);</span>
-<span class="nc" id="L58">        no2.AdicionarFilho(no4);</span>
+<span class="nc" id="L63">        n0.AdicionarFilho(n1a);  n0.AdicionarFilho(n1b);</span>
+<span class="nc" id="L64">        n1a.AdicionarFilho(n2a); n1b.AdicionarFilho(n2b);</span>
+<span class="nc" id="L65">        n2a.AdicionarFilho(n3a); n2b.AdicionarFilho(n3b);</span>
 
-<span class="nc" id="L60">        Mapa mapa = new Mapa(no0);</span>
-<span class="nc" id="L61">        NoMapa atual = mapa.getRaiz();</span>
-<span class="nc" id="L62">        atual.setVisitado(true);</span>
+<span class="nc" id="L67">        Mapa mapa = new Mapa(n0);</span>
+<span class="nc" id="L68">        NoMapa atual = mapa.getRaiz();</span>
+<span class="nc" id="L69">        atual.setVisitado(true);</span>
 
-<span class="nc" id="L64">        System.out.println(&quot;=== BEM-VINDO AO RPG GAME ===&quot;);</span>
-<span class="nc" id="L65">        System.out.println(&quot;Sua missão: atravessar o mapa e derrotar o chefe final!&quot;);</span>
-<span class="nc" id="L66">        System.out.println();</span>
+<span class="nc" id="L71">        System.out.println(&quot;=== BEM-VINDO AO RPG GAME ===&quot;);</span>
+<span class="nc" id="L72">        System.out.println(&quot;Traversse o mapa e derrote o chefe final!&quot;);</span>
+<span class="nc" id="L73">        System.out.println();</span>
 
         // Loop principal de progressão
         while (true) {
-            // Executa a batalha do nó atual
-<span class="nc" id="L71">            boolean vitoria = atual.getBatalha().Executar(heroi, baralho, entrada);</span>
+<span class="nc" id="L77">            atual.getEvento().Iniciar(estado);</span>
 
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (!vitoria) {</span>
-<span class="nc" id="L74">                System.out.println(&quot;&gt;&gt;&gt; GAME OVER! &quot; + heroi.getNome() + &quot; foi derrotado. &lt;&lt;&lt;&quot;);</span>
-<span class="nc" id="L75">                break;</span>
-            }
-
-            // Vitória em nó final = fim do jogo
-<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (atual.isFinal()) {</span>
-<span class="nc" id="L80">                System.out.println(&quot;&gt;&gt;&gt; VOCÊ VENCEU O JOGO! Parabéns! &lt;&lt;&lt;&quot;);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (!heroi.EstaVivo()) {</span>
+<span class="nc" id="L80">                System.out.println(&quot;&gt;&gt;&gt; GAME OVER! &quot; + heroi.getNome() + &quot; foi derrotado. &lt;&lt;&lt;&quot;);</span>
 <span class="nc" id="L81">                break;</span>
             }
 
-            // Exibe status do herói entre batalhas
-<span class="nc" id="L85">            System.out.println();</span>
-<span class="nc" id="L86">            System.out.println(&quot;--- Status do herói: &quot; + heroi.getVida() + &quot;/&quot; + heroi.getVidaMaxima() + &quot; HP ---&quot;);</span>
-
-            // Mostra opções de próxima batalha
-<span class="nc" id="L89">            ArrayList&lt;NoMapa&gt; filhos = atual.getFilhos();</span>
-<span class="nc" id="L90">            System.out.println(&quot;Escolha o próximo destino:&quot;);</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">            for (int i = 0; i &lt; filhos.size(); i++) {</span>
-<span class="nc" id="L92">                Inimigo prox = filhos.get(i).getBatalha().getInimigo();</span>
-<span class="nc" id="L93">                System.out.println(&quot;  &quot; + (i + 1) + &quot; - &quot; + prox.getNome() + &quot; (&quot; + prox.getVida() + &quot; HP)&quot;);</span>
-            }
-<span class="nc" id="L95">            System.out.print(&quot;Escolha: &quot;);</span>
-
-<span class="nc" id="L97">            int escolha = entrada.nextInt();</span>
-<span class="nc bnc" id="L98" title="All 4 branches missed.">            while (escolha &lt; 1 || escolha &gt; filhos.size()) {</span>
-<span class="nc" id="L99">                System.out.print(&quot;Opção inválida. Escolha novamente: &quot;);</span>
-<span class="nc" id="L100">                escolha = entrada.nextInt();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            if (atual.isFinal()) {</span>
+<span class="nc" id="L85">                System.out.println(&quot;&gt;&gt;&gt; VOCÊ VENCEU! Parabéns! &lt;&lt;&lt;&quot;);</span>
+<span class="nc" id="L86">                break;</span>
             }
 
-<span class="nc" id="L103">            mapa.Avancar(filhos.get(escolha - 1));</span>
-<span class="nc" id="L104">            atual = mapa.getAtual();</span>
-<span class="nc" id="L105">            System.out.println();</span>
-<span class="nc" id="L106">        }</span>
+            // Exibe status e deixa jogador escolher próximo nó
+<span class="nc" id="L90">            ArrayList&lt;NoMapa&gt; filhos = atual.getFilhos();</span>
+<span class="nc" id="L91">            System.out.println(&quot;--- &quot; + heroi.getNome() + &quot;: &quot; + heroi.getVida() + &quot;/&quot;</span>
+<span class="nc" id="L92">                    + heroi.getVidaMaxima() + &quot; HP | &quot; + estado.getOuro() + &quot; ouro ---&quot;);</span>
+<span class="nc" id="L93">            System.out.println(&quot;Escolha o próximo destino:&quot;);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            for (int i = 0; i &lt; filhos.size(); i++) {</span>
+<span class="nc" id="L95">                System.out.println(&quot;  &quot; + (i + 1) + &quot; - &quot; + filhos.get(i).getEvento().getNome());</span>
+            }
+<span class="nc" id="L97">            System.out.print(&quot;Escolha: &quot;);</span>
 
-<span class="nc" id="L108">        entrada.close();</span>
-<span class="nc" id="L109">    }</span>
+<span class="nc" id="L99">            int escolha = entrada.nextInt();</span>
+<span class="nc bnc" id="L100" title="All 4 branches missed.">            while (escolha &lt; 1 || escolha &gt; filhos.size()) {</span>
+<span class="nc" id="L101">                System.out.print(&quot;Opção inválida: &quot;);</span>
+<span class="nc" id="L102">                escolha = entrada.nextInt();</span>
+            }
+
+<span class="nc" id="L105">            mapa.Avancar(filhos.get(escolha - 1));</span>
+<span class="nc" id="L106">            atual = mapa.getAtual();</span>
+<span class="nc" id="L107">            System.out.println();</span>
+<span class="nc" id="L108">        }</span>
+
+<span class="nc" id="L110">        entrada.close();</span>
+<span class="nc" id="L111">    }</span>
+
+    /** Monta o baralho inicial do jogador. */
+    private static Baralho MontarBaralho() {
+<span class="nc" id="L115">        Baralho b = new Baralho();</span>
+<span class="nc" id="L116">        b.AdicionarCarta(new CartaDano(&quot;Espada&quot;, 1, 6));</span>
+<span class="nc" id="L117">        b.AdicionarCarta(new CartaDano(&quot;Espada&quot;, 1, 6));</span>
+<span class="nc" id="L118">        b.AdicionarCarta(new CartaDano(&quot;Bola de fogo&quot;, 2, 8));</span>
+<span class="nc" id="L119">        b.AdicionarCarta(new CartaDano(&quot;Espinho&quot;, 2, 8));</span>
+<span class="nc" id="L120">        b.AdicionarCarta(new CartaDano(&quot;Flechada&quot;, 2, 12));</span>
+<span class="nc" id="L121">        b.AdicionarCarta(new CartaEscudo(&quot;Escudo&quot;, 1, 5));</span>
+<span class="nc" id="L122">        b.AdicionarCarta(new CartaEscudo(&quot;Escudo&quot;, 1, 5));</span>
+<span class="nc" id="L123">        b.AdicionarCarta(new CartaEscudo(&quot;Barreira&quot;, 2, 10));</span>
+<span class="nc" id="L124">        b.AdicionarCarta(new CartaEscudo(&quot;Parede de terra&quot;, 1, 10));</span>
+<span class="nc" id="L125">        b.AdicionarCarta(new CartaEscudo(&quot;Parede de ferro&quot;, 2, 15));</span>
+<span class="nc" id="L126">        b.AdicionarCarta(new CartaVeneno(&quot;Frasco de Veneno&quot;, 1, 3));</span>
+<span class="nc" id="L127">        b.AdicionarCarta(new CartaVeneno(&quot;Frasco de Veneno&quot;, 1, 3));</span>
+<span class="nc" id="L128">        b.AdicionarCarta(new CartaFraqueza(&quot;Golpe Enfraquecedor&quot;, 1, 2));</span>
+<span class="nc" id="L129">        b.AdicionarCarta(new CartaFraqueza(&quot;Golpe Atordoante&quot;, 1, 2));</span>
+<span class="nc" id="L130">        b.AdicionarCarta(new CartaDano(&quot;Flechada&quot;, 2, 12));</span>
+<span class="nc" id="L131">        return b;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

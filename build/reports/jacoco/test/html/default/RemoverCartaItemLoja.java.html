@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RemoverCartaItemLoja.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">RemoverCartaItemLoja.java</span></div><h1>RemoverCartaItemLoja.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+
+/**
+ * Estratégia concreta de {@link ItemLoja}: remove uma carta do baralho do jogador.
+ * Útil para eliminar cartas fracas e enxugar o deck.
+ * Implementa o padrão &lt;b&gt;Strategy&lt;/b&gt;.
+ */
+<span class="nc" id="L8">public class RemoverCartaItemLoja implements ItemLoja {</span>
+
+    private static final int PRECO = 50;
+
+    @Override
+    public String getDescricao() {
+<span class="nc" id="L14">        return &quot;Remover uma carta do baralho — &quot; + PRECO + &quot; ouro&quot;;</span>
+    }
+
+    @Override
+<span class="nc" id="L18">    public int getPreco() { return PRECO; }</span>
+
+    @Override
+    public void Aplicar(EstadoJogador estado) {
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (!estado.GastarOuro(PRECO)) {</span>
+<span class="nc" id="L23">            System.out.println(&quot;Ouro insuficiente! (Você tem &quot; + estado.getOuro() + &quot; ouro)&quot;);</span>
+<span class="nc" id="L24">            return;</span>
+        }
+
+<span class="nc" id="L27">        ArrayList&lt;Carta&gt; todas = estado.getBaralho().getTodas();</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (todas.isEmpty()) {</span>
+<span class="nc" id="L29">            System.out.println(&quot;Seu baralho está vazio!&quot;);</span>
+<span class="nc" id="L30">            estado.AdicionarOuro(PRECO); // devolve o ouro</span>
+<span class="nc" id="L31">            return;</span>
+        }
+
+<span class="nc" id="L34">        System.out.println(&quot;Qual carta deseja remover?&quot;);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        for (int i = 0; i &lt; todas.size(); i++) {</span>
+<span class="nc" id="L36">            System.out.println(&quot;  &quot; + (i + 1) + &quot; - &quot; + todas.get(i).Descricao());</span>
+        }
+<span class="nc" id="L38">        System.out.print(&quot;Escolha: &quot;);</span>
+
+<span class="nc" id="L40">        int escolha = estado.getEntrada().nextInt();</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">        if (escolha &gt;= 1 &amp;&amp; escolha &lt;= todas.size()) {</span>
+<span class="nc" id="L42">            Carta removida = todas.get(escolha - 1);</span>
+<span class="nc" id="L43">            estado.getBaralho().RemoverCarta(removida);</span>
+<span class="nc" id="L44">            System.out.println(removida.getNome() + &quot; foi removida do baralho.&quot;);</span>
+<span class="nc" id="L45">        } else {</span>
+<span class="nc" id="L46">            System.out.println(&quot;Opção inválida. Ouro devolvido.&quot;);</span>
+<span class="nc" id="L47">            estado.AdicionarOuro(PRECO);</span>
+        }
+<span class="nc" id="L49">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

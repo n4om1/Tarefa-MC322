@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventoFogueira.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">EventoFogueira.java</span></div><h1>EventoFogueira.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+
+/**
+ * Evento de fogueira no mapa. O jogador escolhe entre descansar (recuperar vida)
+ * ou forjar (melhorar uma carta do baralho).
+ *
+ * &lt;p&gt;Utiliza o padrão &lt;b&gt;Command&lt;/b&gt; ({@link ComandoFogueira}): cada ação disponível
+ * é encapsulada como um objeto de comando independente. Para adicionar novas ações
+ * à fogueira, basta criar uma nova implementação de {@link ComandoFogueira} e
+ * registrá-la aqui — sem alterar o código desta classe.&lt;/p&gt;
+ */
+public class EventoFogueira extends Evento {
+
+    private ArrayList&lt;ComandoFogueira&gt; comandos;
+
+    public EventoFogueira() {
+<span class="nc" id="L17">        super(&quot;Fogueira&quot;);</span>
+<span class="nc" id="L18">        comandos = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L19">        comandos.add(new ComandoDescansar());</span>
+<span class="nc" id="L20">        comandos.add(new ComandoMelhorarCarta());</span>
+<span class="nc" id="L21">    }</span>
+
+    @Override
+    public void Iniciar(EstadoJogador estado) {
+<span class="nc" id="L25">        System.out.println(&quot;=== FOGUEIRA ===&quot;);</span>
+<span class="nc" id="L26">        System.out.println(&quot;Você encontra uma fogueira crepitante. O que deseja fazer?&quot;);</span>
+<span class="nc" id="L27">        System.out.println();</span>
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for (int i = 0; i &lt; comandos.size(); i++) {</span>
+<span class="nc" id="L30">            System.out.println(&quot;  &quot; + (i + 1) + &quot; - &quot; + comandos.get(i).getDescricao());</span>
+        }
+<span class="nc" id="L32">        System.out.print(&quot;Escolha: &quot;);</span>
+
+<span class="nc" id="L34">        int escolha = estado.getEntrada().nextInt();</span>
+<span class="nc bnc" id="L35" title="All 4 branches missed.">        while (escolha &lt; 1 || escolha &gt; comandos.size()) {</span>
+<span class="nc" id="L36">            System.out.print(&quot;Opção inválida. Escolha novamente: &quot;);</span>
+<span class="nc" id="L37">            escolha = estado.getEntrada().nextInt();</span>
+        }
+
+<span class="nc" id="L40">        comandos.get(escolha - 1).Executar(estado);</span>
+<span class="nc" id="L41">        System.out.println();</span>
+<span class="nc" id="L42">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

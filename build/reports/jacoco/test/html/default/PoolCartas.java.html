@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PoolCartas.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">PoolCartas.java</span></div><h1>PoolCartas.java</h1><pre class="source lang-java linenums">import java.util.Random;
+
+/**
+ * Classe utilitária que gera cartas aleatórias a partir do conjunto de cartas disponíveis no jogo.
+ * Utilizada por recompensas de batalha, lojas e eventos.
+ */
+public class PoolCartas {
+
+<span class="nc" id="L9">    private static final Random rand = new Random();</span>
+
+    /** Construtor privado — classe utilitária, não deve ser instanciada. */
+    private PoolCartas() {}
+
+    /**
+     * Retorna uma carta aleatória do pool disponível.
+     * @return Uma nova instância de {@link Carta} escolhida aleatoriamente.
+     */
+    public static Carta CartaAleatoria() {
+<span class="nc" id="L19">        int tipo = rand.nextInt(6);</span>
+<span class="nc bnc" id="L20" title="All 7 branches missed.">        switch (tipo) {</span>
+<span class="nc" id="L21">            case 0: return new CartaDano(&quot;Espada&quot;, 1, 6);</span>
+<span class="nc" id="L22">            case 1: return new CartaDano(&quot;Flechada&quot;, 2, 12);</span>
+<span class="nc" id="L23">            case 2: return new CartaDano(&quot;Bola de fogo&quot;, 2, 8);</span>
+<span class="nc" id="L24">            case 3: return new CartaEscudo(&quot;Barreira&quot;, 2, 10);</span>
+<span class="nc" id="L25">            case 4: return new CartaVeneno(&quot;Frasco de Veneno&quot;, 1, 3);</span>
+<span class="nc" id="L26">            case 5: return new CartaFraqueza(&quot;Golpe Enfraquecedor&quot;, 1, 2);</span>
+<span class="nc" id="L27">            default: return new CartaDano(&quot;Espada&quot;, 1, 6);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

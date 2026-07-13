@@ -35,4 +35,16 @@ public class CartaVeneno extends Carta {
         System.out.println(heroi.getNome() + " usa " + getNome() + " e aplica " + acumulos + " de Veneno em " + inimigo.getNome() + "!");
         inimigo.AplicarEfeito(new EfeitoVeneno(inimigo, acumulos), combate);
     }
+
+    /** @return Descrição atualizada com os acúmulos atuais. */
+    @Override
+    public String getDescricao() {
+        return "Aplica " + acumulos + " de Veneno ao inimigo." + (isMelhorada() ? " [+]" : "");
+    }
+
+    /** Aumenta os acúmulos de veneno em 2 ao ser melhorada na fogueira. */
+    @Override
+    protected void AplicarMelhoria() {
+        acumulos += 2;
+    }
 }

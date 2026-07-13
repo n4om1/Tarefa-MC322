@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComandoMelhorarCarta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Tarefa1</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">ComandoMelhorarCarta.java</span></div><h1>ComandoMelhorarCarta.java</h1><pre class="source lang-java linenums">import java.util.ArrayList;
+
+/**
+ * Comando concreto da {@link EventoFogueira}: melhora uma carta do baralho do jogador.
+ * Aumenta os atributos da carta escolhida (dano, escudo ou acúmulos de efeito).
+ * Implementa o padrão &lt;b&gt;Command&lt;/b&gt;.
+ */
+<span class="nc" id="L8">public class ComandoMelhorarCarta implements ComandoFogueira {</span>
+
+    @Override
+    public String getDescricao() {
+<span class="nc" id="L12">        return &quot;Forjar — Melhorar uma carta do baralho&quot;;</span>
+    }
+
+    @Override
+    public void Executar(EstadoJogador estado) {
+<span class="nc" id="L17">        ArrayList&lt;Carta&gt; todas = estado.getBaralho().getTodas();</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">        if (todas.isEmpty()) {</span>
+<span class="nc" id="L19">            System.out.println(&quot;Seu baralho está vazio!&quot;);</span>
+<span class="nc" id="L20">            return;</span>
+        }
+
+<span class="nc" id="L23">        System.out.println(&quot;Escolha uma carta para melhorar:&quot;);</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        for (int i = 0; i &lt; todas.size(); i++) {</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            String tag = todas.get(i).isMelhorada() ? &quot; [JÁ MELHORADA]&quot; : &quot;&quot;;</span>
+<span class="nc" id="L26">            System.out.println(&quot;  &quot; + (i + 1) + &quot; - &quot; + todas.get(i).Descricao() + tag);</span>
+        }
+<span class="nc" id="L28">        System.out.print(&quot;Escolha: &quot;);</span>
+
+<span class="nc" id="L30">        int escolha = estado.getEntrada().nextInt();</span>
+<span class="nc bnc" id="L31" title="All 4 branches missed.">        if (escolha &gt;= 1 &amp;&amp; escolha &lt;= todas.size()) {</span>
+<span class="nc" id="L32">            todas.get(escolha - 1).Melhorar();</span>
+        } else {
+<span class="nc" id="L34">            System.out.println(&quot;Opção inválida. Nenhuma carta foi melhorada.&quot;);</span>
+        }
+<span class="nc" id="L36">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

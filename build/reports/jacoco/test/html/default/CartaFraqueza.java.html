@@ -35,5 +35,17 @@ public class CartaFraqueza extends Carta {
 <span class="nc" id="L35">        System.out.println(heroi.getNome() + &quot; usa &quot; + getNome() + &quot; e aplica &quot; + acumulos + &quot; de Fraqueza em &quot; + inimigo.getNome() + &quot;!&quot;);</span>
 <span class="nc" id="L36">        inimigo.AplicarEfeito(new EfeitoFraqueza(inimigo, acumulos), combate);</span>
 <span class="nc" id="L37">    }</span>
+
+    /** @return Descrição atualizada com os acúmulos atuais. */
+    @Override
+    public String getDescricao() {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        return &quot;Aplica &quot; + acumulos + &quot; de Fraqueza ao inimigo, reduzindo seu ataque.&quot; + (isMelhorada() ? &quot; [+]&quot; : &quot;&quot;);</span>
+    }
+
+    /** Aumenta os acúmulos de fraqueza em 1 ao ser melhorada na fogueira. */
+    @Override
+    protected void AplicarMelhoria() {
+<span class="nc" id="L48">        acumulos += 1;</span>
+<span class="nc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -156,6 +156,14 @@ public abstract class Entidade {
     public ArrayList<Efeito> getEfeitos() { return efeitos; }
 
     /**
+     * Recupera pontos de vida, limitado ao máximo.
+     * @param quantidade O valor a ser restaurado.
+     */
+    public void Curar(int quantidade) {
+        vida = Math.min(vida + quantidade, vidaMaxima);
+    }
+
+    /**
      * Remove todos os efeitos ativos da entidade sem interagir com o Publisher.
      * Deve ser chamado entre batalhas para garantir que o herói inicie cada
      * combate sem buffs ou debuffs residuais da batalha anterior.

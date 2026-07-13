@@ -1,48 +1,78 @@
+import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Encapsula a lógica de um combate individual dentro do sistema de progressão do mapa.
- * Cada {@link NoMapa} contém uma instância de Batalha que é executada quando o jogador
- * visita aquele nó. A classe cuida de preparar o estado do herói antes do combate
- * e de reportar o resultado ao sistema de mapa.
+ * Evento de combate entre o herói e um inimigo.
+ * Herda de {@link Evento} e integra-se ao sistema de mapa.
+ * Após uma vitória, o jogador recebe ouro e pode escolher uma nova carta.
  */
-public class Batalha {
+public class Batalha extends Evento {
 
-    /** O inimigo que o jogador enfrentará nesta batalha. */
     private Inimigo inimigo;
+    private final Random rand = new Random();
 
     /**
-     * Construtor da batalha.
-     * @param inimigo O inimigo que participará do combate.
+     * @param inimigo O inimigo que o jogador enfrentará nesta batalha.
      */
     public Batalha(Inimigo inimigo) {
+        super("Batalha: " + inimigo.getNome());
         this.inimigo = inimigo;
     }
 
     /**
-     * Prepara e executa o combate entre o herói e o inimigo.
-     * Antes de iniciar, limpa os efeitos ativos do herói e reinicia o baralho,
-     * mantendo apenas os pontos de vida e a composição do baralho entre batalhas.
-     *
-     * @param heroi   O herói controlado pelo jogador (vida e baralho são mantidos).
-     * @param baralho O baralho do herói (todas as cartas são devolvidas à pilha de compra).
-     * @param entrada O scanner para leitura das escolhas do jogador.
-     * @return {@code true} se o herói venceu; {@code false} se foi derrotado.
+     * Prepara e executa o combate. Limpa efeitos e reinicia o baralho antes de iniciar,
+     * mantendo apenas vida e composição do deck. Se o herói vencer, distribui recompensas.
+     * @param estado O estado do jogador mantido entre batalhas.
      */
-    public boolean Executar(Heroi heroi, Baralho baralho, Scanner entrada) {
-        // Reseta efeitos e baralho entre batalhas, mantendo vida
+    @Override
+    public void Iniciar(EstadoJogador estado) {
+        Heroi heroi = estado.getHeroi();
+        Baralho baralho = estado.getBaralho();
+        Scanner entrada = estado.getEntrada();
+
+        // Reseta efeitos e baralho entre batalhas, mantendo vida e composição do deck
         heroi.LimparEfeitos();
         baralho.ReiniciarParaNovaBatalha();
 
-        System.out.println(">>> Batalha contra " + inimigo.getNome() + " (" + inimigo.getVida() + " HP) <<<");
+        System.out.println(">>> Batalha contra " + inimigo.getNome()
+                + " (" + inimigo.getVida() + " HP) <<<");
         System.out.println();
 
         Combate combate = new Combate(heroi, inimigo, baralho, entrada);
         combate.Executar();
 
-        return heroi.EstaVivo();
+        if (heroi.EstaVivo()) {
+            DistribuirRecompensas(estado);
+        }
     }
 
-    /** @return O inimigo desta batalha. */
+    /**
+     * Distribui recompensas após a vitória: ouro e escolha de carta.
+     */
+    private void DistribuirRecompensas(EstadoJogador estado) {
+        int ouroGanho = 20 + rand.nextInt(21); // 20–40 ouro
+        estado.AdicionarOuro(ouroGanho);
+        System.out.println("Recompensa: +" + ouroGanho + " ouro! Total: " + estado.getOuro() + " ouro.");
+        System.out.println();
+
+        System.out.println("Escolha uma carta para adicionar ao baralho (0 para pular):");
+        Carta[] opcoes = new Carta[3];
+        for (int i = 0; i < 3; i++) {
+            opcoes[i] = PoolCartas.CartaAleatoria();
+            System.out.println("  " + (i + 1) + " - " + opcoes[i].Descricao());
+        }
+        System.out.println("  0 - Pular");
+        System.out.print("Escolha: ");
+
+        int escolha = estado.getEntrada().nextInt();
+        if (escolha >= 1 && escolha <= 3) {
+            estado.getBaralho().AdicionarCarta(opcoes[escolha - 1]);
+            System.out.println(opcoes[escolha - 1].getNome() + " adicionada ao baralho!");
+        } else {
+            System.out.println("Carta pulada.");
+        }
+        System.out.println();
+    }
+
     public Inimigo getInimigo() { return inimigo; }
 }

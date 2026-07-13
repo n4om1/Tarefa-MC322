@@ -129,7 +129,7 @@ public abstract class Entidade {
      * Nome da entidade.
      * 
      * @return O nome da entidade. */
-<span class="nc" id="L132">    public String getNome() { return nome; }</span>
+<span class="fc" id="L132">    public String getNome() { return nome; }</span>
 
     /** 
      * Vida atual.
@@ -156,12 +156,20 @@ public abstract class Entidade {
 <span class="fc" id="L156">    public ArrayList&lt;Efeito&gt; getEfeitos() { return efeitos; }</span>
 
     /**
+     * Recupera pontos de vida, limitado ao máximo.
+     * @param quantidade O valor a ser restaurado.
+     */
+    public void Curar(int quantidade) {
+<span class="nc" id="L163">        vida = Math.min(vida + quantidade, vidaMaxima);</span>
+<span class="nc" id="L164">    }</span>
+
+    /**
      * Remove todos os efeitos ativos da entidade sem interagir com o Publisher.
      * Deve ser chamado entre batalhas para garantir que o herói inicie cada
      * combate sem buffs ou debuffs residuais da batalha anterior.
      */
     public void LimparEfeitos() {
-<span class="fc" id="L164">        efeitos.clear();</span>
-<span class="fc" id="L165">    }</span>
+<span class="fc" id="L172">        efeitos.clear();</span>
+<span class="fc" id="L173">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
